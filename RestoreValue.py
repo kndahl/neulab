@@ -1,5 +1,5 @@
-from calendar import c
 import numpy as np
+import pandas as pd
 from Algorithms import *
 
 def MeanRestore(column):
@@ -15,9 +15,7 @@ def ModeRestore(column):
     return Mode(column=column)
 
 def CorrCoefRestore(df, row_start, row_end):
-    '''Replace missing value with CorrCoef. Returns value to restore.'''
-    import pandas as pd
-    from Algorithms import CorrelationCoefficient
+    '''Replace missing value with CorrCoef value. Returns value to restore.'''
     df = df.iloc[row_start : row_end]
     inds = df.loc[pd.isna(df).any(1), :].index # Find where is None value
     try: # If inds exists
@@ -37,3 +35,25 @@ def CorrCoefRestore(df, row_start, row_end):
         return PA
     except IndexError:
         return
+
+def MetricRestore(df, row_start, row_end, metric):
+    '''Replace missing value with Metric value. Returns value to restore.'''
+    df = df.iloc[row_start : row_end]
+    inds_col = df.columns[df.isna().any()].tolist() # Find where is None value (col)
+    inds_row = df.loc[pd.isna(df).any(1), :].index[0] # Find where is None value (row)
+    if len(inds_col) > 1:
+        return
+    nan_col = df[inds_col]
+    df_cut = df.drop(inds_col[0], 1)
+    dist_list = []
+    val_list = df[nan_col.columns[0]].iloc[:inds_row].tolist()
+    for index, row in df_cut.iterrows():
+        if index != inds_row:
+            if metric == 'euclid':
+                dist_list.append(round(EuclidMertic(vector1=df_cut.iloc[inds_row], vector2=row), 2))
+            if metric == 'manhattan':
+                dist_list.append(round(ManhattanMetric(vector1=df_cut.iloc[inds_row], vector2=row), 2))
+            if metric == 'max':
+                dist_list.append(round(MaxMetric(vector1=df_cut.iloc[inds_row], vector2=row), 2))
+    DISTANCE = round(1/(sum([1/i for i in dist_list])) * sum([v/d for v, d in zip(val_list, dist_list)]), 2)
+    return DISTANCE
