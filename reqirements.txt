@@ -1,2 +1,7 @@
 numpy
+pandas
 scipy
+wheel
+setuptools
+twine
+pytest

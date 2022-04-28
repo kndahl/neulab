@@ -1,2 +1,7 @@
 test.ipynb
 __pycache__
+venv
+.pytest_cache
+.eggs
+build
+dist
