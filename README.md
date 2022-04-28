@@ -1,4 +1,4 @@
-# neufarm
+# neulib
 Tool for data preprocess in ML.
 # Installation
 ```
