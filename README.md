@@ -59,7 +59,7 @@ cc = CorrelationCoefficient(vector1=df.col1, vector2=df.col2)
 Output: 0.906843948104356
 ```
 ## Rertore value methods
-### You have to send df with NaN value. It is important that the NaN value be either above or below the table. 
+### You have to send df with NaN value. It is important that there is only one NaN in the table..
 Example:
 ```
    P1  P2  P3  P4   P5
@@ -67,19 +67,6 @@ Example:
 1   5   5   5   4  3.0
 2   4   3   3   2  5.0
 3   5   4   3   3  NaN
-```
-Or
-```
-      G   T   B    R   W
-0   NaN  56  91  160  58
-1  89.0  58  89  157  48
-2  91.0  64  91  165  54
-3  91.0  51  91  170  54
-4  86.0  56  84  157  44
-5  97.0  53  86  175  56
-6  92.0  51  91  165  54
-7  87.0  55  88  170  53
-8  91.0  55  90  165  55
 ```
 ### Recovery with metrics
 ```python

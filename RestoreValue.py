@@ -20,10 +20,7 @@ def CorrCoefRestore(df, row_start, row_end):
     inds = df.loc[pd.isna(df).any(1), :].index # Find where is None value
     try: # If inds exists
         inds = inds.tolist()[0]
-        if row_start == inds: # If nan at top
-            df_cut = df.iloc[inds+1 : row_end]
-        if row_end >= inds & inds != row_start:
-            df_cut = df.iloc[row_start : inds]
+        df_cut = df.drop(inds) # Drop column with NaN
         nan_col = df_cut.columns[df.isnull().any()].tolist()[0] # Get row with NaN
         coef_list = []
         coefs_weights = []
@@ -44,7 +41,7 @@ def MetricRestore(df, row_start, row_end, metric):
     if len(inds_col) > 1:
         return
     nan_col = df[inds_col]
-    df_cut = df.drop(columns=inds_col[0])
+    df_cut = df.drop(columns=inds_col[0]) # Drop column with NaN
     dist_list = []
     if row_start == inds_row: # If nan at top
         val_list = df[nan_col.columns[0]].iloc[inds_row+1:row_end].tolist()
