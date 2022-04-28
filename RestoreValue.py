@@ -20,7 +20,7 @@ def CorrCoefRestore(df, row_start, row_end):
     inds = df.loc[pd.isna(df).any(1), :].index # Find where is None value
     try: # If inds exists
         inds = inds.tolist()[0]
-        if row_start == inds:
+        if row_start == inds: # If nan at top
             df_cut = df.iloc[inds+1 : row_end]
         if row_end >= inds & inds != row_start:
             df_cut = df.iloc[row_start : inds]
@@ -44,9 +44,12 @@ def MetricRestore(df, row_start, row_end, metric):
     if len(inds_col) > 1:
         return
     nan_col = df[inds_col]
-    df_cut = df.drop(inds_col[0], 1)
+    df_cut = df.drop(columns=inds_col[0])
     dist_list = []
-    val_list = df[nan_col.columns[0]].iloc[:inds_row].tolist()
+    if row_start == inds_row: # If nan at top
+        val_list = df[nan_col.columns[0]].iloc[inds_row+1:row_end].tolist()
+    else:
+        val_list = df[nan_col.columns[0]].iloc[:inds_row].tolist()
     for index, row in df_cut.iterrows():
         if index != inds_row:
             if metric == 'euclid':
