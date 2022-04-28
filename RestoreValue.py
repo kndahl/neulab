@@ -1,21 +1,24 @@
 import numpy as np
 import pandas as pd
-from Algorithms import *
 
 def MeanRestore(column):
     '''Replace missing value with mean. Returns value to restore.'''
+    from Algorithms import Mean
     return Mean(column=column)
 
 def MedianRestore(column):
     '''Replace missing value with median. Returns value to restore.'''
+    from Algorithms import Median
     return Median(column=column)
 
 def ModeRestore(column):
     '''Replace missing value with mode. Returns value to restore.''' 
+    from Algorithms import Mode
     return Mode(column=column)
 
 def CorrCoefRestore(df, row_start, row_end):
     '''Replace missing value with CorrCoef value. Returns value to restore.'''
+    from Algorithms import CorrelationCoefficient, Mean
     df = df.iloc[row_start : row_end]
     inds = df.loc[pd.isna(df).any(1), :].index # Find where is None value
     try: # If inds exists
@@ -35,7 +38,9 @@ def CorrCoefRestore(df, row_start, row_end):
 
 def MetricRestore(df, row_start, row_end, metric):
     '''Replace missing value with Metric value. Returns value to restore.'''
-    df = df.iloc[row_start : row_end]
+    from Algorithms import EuclidMertic, ManhattanMetric, MaxMetric
+    print(df)
+    df = df.iloc[row_start : row_end+1]
     inds_col = df.columns[df.isna().any()].tolist() # Find where is None value (col)
     inds_row = df.loc[pd.isna(df).any(1), :].index[0] # Find where is None value (row)
     if len(inds_col) > 1:
