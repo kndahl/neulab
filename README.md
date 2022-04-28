@@ -81,6 +81,7 @@ Or
 7  87.0  55  88  170  53
 8  91.0  55  90  165  55
 ```
+### Recovery with metrics
 ```python
 from RestoreValue import MetricRestore
 d = {'P1': [3, 5, 4, 5], 'P2': [4, 5, 3, 4], 'P3': [5, 5, 3, 3], 'P4': [3, 4, 2, 3], 'P5': [4, 3, 5, np.NaN]}
@@ -96,4 +97,15 @@ Output:
 euclid_m = 4.13
 mnht_m = 4.1
 mx_m = 4.25
+```
+### Recovery with correlation coefficient
+```python
+from RestoreValue import CorrCoefRestore
+
+d = {'G': [99, 89, 91, 91, 86, 97, np.NaN], 'T': [56, 58, 64, 51, 56, 53, 51], 'B': [91, 89, 91, 91, 84, 86, 91], 'R': [160, 157, 165, 170, 157, 175, 165], 'W': [58, 48, 54, 54, 44, 56, 54]}
+
+df = pd.DataFrame(data=d)
+cc = CorrCoefRestore(df=df, row_start=0, row_end=9)
+
+Output: 94.21
 ```
