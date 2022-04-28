@@ -8,7 +8,7 @@ long_description = (this_directory / "README.md").read_text()
 setup(
     name='neulib',
     packages=find_packages(include=['neulib']),
-    version='0.1.3',
+    version='0.1.5',
     description='Tool for data preprocess in ML.',
     author='Roman Fitzjalen',
     author_email='romaactor@gmail.com',
