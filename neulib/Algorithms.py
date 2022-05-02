@@ -64,3 +64,17 @@ def Mode(vector):
     vector = np.array(vector)
     mode_vector = stats.mode(vector)
     return mode_vector[0][0]
+
+def StdDeviation(vector):
+    '''Calculates standart deviation.'''
+
+    vector = np.array(vector)
+    std = np.std(vector)
+    return std
+
+
+def IsSymmetric(vector):
+    '''Detects if vector is symmetric or asymmetric. Returns True if vector is symmetric or False if vector is asymmetric.'''
+
+    vectype = np.abs(Median(vector=vector) - Mean(vector=vector)) <= 3 * np.sqrt((StdDeviation(vector=vector) ** 2) / len(vector))
+    return vectype
