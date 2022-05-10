@@ -69,7 +69,7 @@ def StdDeviation(vector):
     '''Calculates standart deviation.'''
 
     vector = np.array(vector)
-    std = np.std(vector)
+    std = np.std(vector, ddof=1)
     return std
 
 
