@@ -2,7 +2,7 @@ from cmath import inf
 from textwrap import indent
 import pandas as pd
 import numpy as np
-from neulib.Algorithms import IsSymmetric, Mean, StdDeviation
+from neulab.Algorithms import IsSymmetric, Mean, StdDeviation
 
 def SimpleOutDetect(dataframe, info=True, autorm=False):
     '''Simple algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''

@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from neulib.Normalization import *
+from neulab.Normalization import *
 import pandas as pd
 import numpy as np
 

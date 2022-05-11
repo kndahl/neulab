@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from neulib.OutlierDetection import SimpleOutDetect, Chauvenet
+from neulab.OutlierDetection import SimpleOutDetect, Chauvenet
 import pandas as pd
 import numpy as np
 

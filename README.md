@@ -1,8 +1,8 @@
-# neulib
+# neulab
 Tool for data preprocess in ML.
 # Installation
 ```
-pip install neulib
+pip install neulab
 ```
 # Usage
 
@@ -11,7 +11,7 @@ pip install neulib
 ### Mean
 #### Algorithm for calculating the average value
 ```python
-from neulib.Algorithms import Mean
+from neulab.Algorithms import Mean
 
 d = {'col1': [0, 1, 2]}
 df = pd.DataFrame(data=d)
@@ -23,7 +23,7 @@ Output: 1
 ### Median
 #### Algorithm for calculating the median value
 ```python
-from neulib.Algorithms import Median
+from neulab.Algorithms import Median
 d = {'col1': [0, 1, 2, 3]}
 
 df = pd.DataFrame(data=d)
@@ -34,7 +34,7 @@ Output: 1.5
 ### Mode
 #### Mode Calculation Algorithm
 ```python
-from neulib.Algorithms import Mode
+from neulab.Algorithms import Mode
 
 d = {'col1': [0, 1, 2, 3, 1]}
 df = pd.DataFrame(data=d)
@@ -47,7 +47,7 @@ Output: 1
 ### Standart Deviation
 #### Standard Deviation Algorithm
 ```python
-from neulib.Algorithms import StdDeviation
+from neulab.Algorithms import StdDeviation
 
 d = {'col1': [8.02, 8.16, 3.97, 8.64, 0.84, 4.46, 0.81, 7.74, 8.78, 9.26, 20.46, 29.87, 10.38, 25.71]}
 df = pd.DataFrame(data=d)
@@ -59,7 +59,7 @@ Output: 8.767464705525615
 ### Is Symmetric
 #### Detects if vector is symmetric or asymmetric.
 ```python
-from neulib.Algorithms import IsSymmetric
+from neulab.Algorithms import IsSymmetric
 
 d = {'col1': [8.02, 8.16, 3.97, 8.64, 0.84, 4.46, 0.81, 7.74, 8.78, 9.26, 20.46, 29.87, 10.38, 25.71]}
 df = pd.DataFrame(data=d)
@@ -71,7 +71,7 @@ Output: True
 ### Euclid metric
 #### Algorithm for calculating the distance using the Euclidean metric
 ```python
-from neulib.Algorithms import EuclidMertic
+from neulab.Algorithms import EuclidMertic
 
 d = {'col1': [0, 1, 2], 'col2': [2, 1, 0]}
 df = pd.DataFrame(data=d)
@@ -83,7 +83,7 @@ Output: 2.8284271247461903
 ### Manhattan metric
 #### Algorithm for calculating the distance using the Manhattan metric
 ```python
-from neulib.Algorithms import ManhattanMetric
+from neulab.Algorithms import ManhattanMetric
 
 d = {'col1': [0, 1, 2], 'col2': [2, 1, 0]}
 df = pd.DataFrame(data=d)
@@ -95,7 +95,7 @@ Output: 4.0
 ### Max Metric
 #### Algorithm for calculating the distance using the Max metric
 ```python
-from neulib.Algorithms import MaxMetric
+from neulab.Algorithms import MaxMetric
 
 d = {'col1': [0, 1, 2], 'col2': [2, 1, 0]}
 df = pd.DataFrame(data=d)
@@ -107,7 +107,7 @@ Output: 2
 ### Correlation Coefficient
 #### Algorithm for calculating the correlation coefficient
 ```python
-from neulib.Algorithms import CorrelationCoefficient
+from neulab.Algorithms import CorrelationCoefficient
 
 d = {'col1': [99, 89, 91, 91, 86, 97], 'col2': [58, 48, 54, 54, 44, 56]}
 df = pd.DataFrame(data=d)
@@ -128,7 +128,7 @@ Example:
 ```
 ### Recovery with metrics
 ```python
-from neulib.RestoreValue import MetricRestore
+from neulab.RestoreValue import MetricRestore
 
 d = {'P1': [3, 5, 4, 5], 'P2': [4, 5, 3, 4], 'P3': [5, 5, 3, 3], 'P4': [3, 4, 2, 3], 'P5': [4, 3, 5, np.NaN]}
 df = pd.DataFrame(data=d)
@@ -147,7 +147,7 @@ mx_m = 4.25
 ```
 ### Recovery with correlation coefficient
 ```python
-from neulib.RestoreValue import CorrCoefRestore
+from neulab.RestoreValue import CorrCoefRestore
 
 d = {'G': [99, 89, 91, 91, 86, 97, np.NaN], 'T': [56, 58, 64, 51, 56, 53, 51], 'B': [91, 89, 91, 91, 84, 86, 91], 'R': [160, 157, 165, 170, 157, 175, 165], 'W': [58, 48, 54, 54, 44, 56, 54]}
 df = pd.DataFrame(data=d)
@@ -161,7 +161,7 @@ Output: 94.21
 ### Simple Outlier Detection Algorithm
 #### Algorithm detects and removes (if autorm is True) rows containing the outlier. Returns cleared dataframe.
 ```python
-from neulib.OutlierDetection import SimpleOutDetect
+from neulab.OutlierDetection import SimpleOutDetect
 
 d = {'col1': [1, 0, 342, 1, 1, 0, 1, 0, 1, 255, 1, 1, 1, 0, ]}
 df = pd.DataFrame(data=d)
@@ -188,7 +188,7 @@ index	col1
 ### Chauvenet Algorithm
 #### Chauvenet Algorithm detects and removes (if autorm is True) rows containing the outlier. Returns cleared dataframe.
 ```python
-from neulib.OutlierDetection import Chauvenet
+from neulab.OutlierDetection import Chauvenet
 
 d = {'col1': [8.02, 8.16, 3.97, 8.64, 0.84, 4.46, 0.81, 7.74, 8.78, 9.26, 20.46, 29.87, 10.38, 25.71], 'col2': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
 df = pd.DataFrame(data=d)

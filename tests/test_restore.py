@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from neulib.RestoreValue import *
+from neulab.RestoreValue import *
 import pandas as pd
 
 def test_MetricsEuclid():

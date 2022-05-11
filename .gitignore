@@ -3,7 +3,7 @@ __pycache__
 venv
 .pytest_cache
 .eggs
-neulib.egg-info
+neulab.egg-info
 build
 dist
 setup.py

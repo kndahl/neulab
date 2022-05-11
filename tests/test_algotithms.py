@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from neulib.Algorithms import *
+from neulab.Algorithms import *
 import pandas as pd
 
 def test_Mean():

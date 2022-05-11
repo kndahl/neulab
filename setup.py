@@ -6,8 +6,8 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(
-    name='neulib',
-    packages=find_packages(include=['neulib']),
+    name='neulab',
+    packages=find_packages(include=['neulab']),
     version='0.1.5',
     description='Tool for data preprocess in ML.',
     author='Roman Fitzjalen',
@@ -15,7 +15,7 @@ setup(
     license='MIT',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url = 'https://github.com/kndahl/neufarm',
+    url = 'https://github.com/kndahl/neulab',
     include_package_data = True,
     install_requires=['numpy', 'pandas', 'scipy'],
     setup_requires=['pytest-runner'],
