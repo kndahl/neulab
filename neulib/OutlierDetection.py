@@ -72,40 +72,49 @@ def SimpleOutDetect(dataframe, info=True, autorm=False):
 
 def Chauvenet(dataframe, info=True, autorm=False, outlr=[]):
     '''Chauvenet algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
-    # TODO: fix print
 
     from scipy import special
     import warnings
     warnings.filterwarnings("ignore", category=RuntimeWarning) 
 
-    for column in dataframe:
-        if info is True:
-            print(f'Checking column: {column}...')
-        vector = np.array(dataframe[column])
-        i = 0
-        flag = 0
-        if len(outlr) == 0:
+    def loop(i, elem, vector, outliers, dataframe, dictionary):
+        if len(outliers) == 0:
             outliers = []
         else:
-            outliers = outlr
-            #outliers = list(dict.fromkeys(outlr))
-        dictionary = {}
+            outliers = list(dict.fromkeys(outliers))
         for elem in vector:
             is_out_cond = special.erfc(np.abs(elem - Mean(vector=vector))/StdDeviation(vector=vector)) < 1 / (2 * len(vector))
             if is_out_cond:
                 outliers.append(elem)
-                if info is True:
-                    print(f'{elem} is outlier!')
                 if autorm is True:
                     vector = np.delete(vector, i)
                     condition = dataframe[column] == elem
                     out = dataframe[column].index[condition]
                     dataframe.drop(index=out, inplace = True)
                     i -= 1
-                    if info is True:
-                        print('Outlier deleted.')
                 dictionary.update({column:outliers})
-                Chauvenet(dataframe=dataframe, info=info, autorm=autorm, outlr=outliers)
+                loop(i=0, elem=elem, vector=vector, outliers=outliers, dataframe=dataframe, dictionary=dictionary)
+            i += 1
+
+    for column in dataframe:
+        if info is True:
+            print(f'Checking column: {column}...')
+        vector = np.array(dataframe[column])
+        i = 0
+        outliers = []
+        dictionary = {}
+        for elem in vector:
+            is_out_cond = special.erfc(np.abs(elem - Mean(vector=vector))/StdDeviation(vector=vector)) < 1 / (2 * len(vector))
+            if is_out_cond:
+                outliers.append(elem)
+                if autorm is True:
+                    vector = np.delete(vector, i)
+                    condition = dataframe[column] == elem
+                    out = dataframe[column].index[condition]
+                    dataframe.drop(index=out, inplace = True)
+                    i -= 1
+                dictionary.update({column:outliers})
+                loop(i=0, elem=elem, vector=vector, outliers=outliers, dataframe=dataframe, dictionary=dictionary)
             i += 1
         if dictionary:
             print(f'Detected outliers: {dictionary}')
