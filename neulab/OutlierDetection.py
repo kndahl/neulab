@@ -2,7 +2,7 @@ from cmath import inf
 from textwrap import indent
 import pandas as pd
 import numpy as np
-from neulab.Algorithms import IsSymmetric, Mean, StdDeviation
+from neulab.Algorithms import IsSymmetric, Mean, StdDeviation, Median
 
 def SimpleOutDetect(dataframe, info=True, autorm=False):
     '''Simple algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
@@ -70,7 +70,7 @@ def SimpleOutDetect(dataframe, info=True, autorm=False):
 
     return dataframe
 
-def Chauvenet(dataframe, info=True, autorm=False, outlr=[]):
+def Chauvenet(dataframe, info=True, autorm=False):
     '''Chauvenet algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
 
     from scipy import special
@@ -118,4 +118,38 @@ def Chauvenet(dataframe, info=True, autorm=False, outlr=[]):
             i += 1
         if dictionary:
             print(f'Detected outliers: {dictionary}')
+    return dataframe
+
+def Quratile(dataframe, info=True, autorm=False):
+    '''Quratile algorithm doest use standart deviation and average mean. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
+
+    dictionary = {}
+    for column in dataframe:
+        i = 0
+        outliers = []
+        if info is True:
+            print(f'Checking column: {column}...')
+        vector = np.array(dataframe[column])
+        q50 = Median(vector)
+        q25 = Median(vector[vector < q50])
+        q75 = Median(vector[vector > q50])
+        interval1 = q25 - 1.5 * (q75 - q25)
+        interval2 = q75 + 1.5 * (q75 - q25)
+        if info is True:
+            print(f'Q25 = {q25}, Q50 = {q50}, Q75 = {q75}. Interval1 = {interval1}, Interval2 = {interval2}')
+        for elem in vector:
+            if interval1 < elem < interval2:
+                pass
+            else:
+                outliers.append(elem)
+                if autorm is True:
+                    vector = np.delete(vector, i)
+                    condition = dataframe[column] == elem
+                    out = dataframe[column].index[condition]
+                    dataframe.drop(index=out, inplace = True)
+                    i -= 1
+            i += 1
+        dictionary.update({column:outliers})
+    if dictionary:
+        print(f'Detected outliers: {dictionary}')
     return dataframe

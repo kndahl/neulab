@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from neulab.OutlierDetection import SimpleOutDetect, Chauvenet
+from neulab.OutlierDetection import SimpleOutDetect, Chauvenet, Quratile
 import pandas as pd
 import numpy as np
 
@@ -17,3 +17,10 @@ def test_chauvenet():
     df = pd.DataFrame(data=d)
     df_ethalon = pd.DataFrame(data={'col1': [8.02, 8.16, 8.64, 8.78], 'col2': [1, 1, 1, 1]}, index=[0, 1, 3, 8])
     pd.testing.assert_frame_equal(Chauvenet(dataframe=df, info=False, autorm=True), df_ethalon)
+
+def test_quartile():
+
+    d = {'col1': [-6, 0, 1, 2, 4, 5, 5, 6, 7, 100], 'col2': [-1, 0, 1, 2, 0, 0, 1, 0, 50, 13]}
+    df = pd.DataFrame(data=d)
+    df_ethalon = pd.DataFrame(data={'col1': [-6, 0, 1, 2, 4, 5, 5, 6], 'col2': [-1, 0, 1, 2, 0, 0, 1, 0]}, index=[0, 1, 2, 3, 4, 5, 6, 7])
+    pd.testing.assert_frame_equal(Quratile(dataframe=df, info=True, autorm=True), df_ethalon)

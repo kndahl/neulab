@@ -7,7 +7,6 @@ pip install neulab
 # Usage
 
 ## Algorithms
-
 ### Mean
 #### Algorithm for calculating the average value
 ```python
@@ -43,7 +42,6 @@ mode = Mode(vector=df.col1)
 
 Output: 1
 ```
-
 ### Standart Deviation
 #### Standard Deviation Algorithm
 ```python
@@ -55,7 +53,6 @@ std = StdDeviation(df.col1)
 
 Output: 8.767464705525615
 ```
-
 ### Is Symmetric
 #### Detects if vector is symmetric or asymmetric.
 ```python
@@ -67,7 +64,6 @@ symmtr = IsSymmetric(vector=df.col1)
 
 Output: True
 ```
-
 ### Euclid metric
 #### Algorithm for calculating the distance using the Euclidean metric
 ```python
@@ -116,6 +112,7 @@ cc = CorrelationCoefficient(vector1=df.col1, vector2=df.col2)
 
 Output: 0.906843948104356
 ```
+
 ## Rertore value methods
 ### You have to send df with NaN value. It is important that there is only one NaN in the table..
 Example:
@@ -203,3 +200,25 @@ Output: Detected outliers: {'col1': [29.87, 25.71, 20.46, 0.84, 0.81, 3.97, 4.46
 3	8.64	1
 8	8.78	1
 ```
+### Quratile algorithm
+#### Quratile algorithm doest use standart deviation and average mean. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.
+
+```python
+from neulab.OutlierDetection import Quratile
+
+d = {'col1': [-6, 0, 1, 2, 4, 5, 5, 6, 7, 100], 'col2': [-1, 0, 1, 2, 0, 0, 1, 0, 50, 13]}
+df = pd.DataFrame(data=d)
+
+qurtl = Quratile(dataframe=df, info=True, autorm=True)
+
+Output: Detected outliers: {'col1': [100], 'col2': [50]}
+
+index col1	col2
+0	   -6	   -1
+1	   0	   0
+2	   1	   1
+3	   2	   2
+4	   4	   0
+5	   5	   0
+6	   5	   1
+7	   6	   0
