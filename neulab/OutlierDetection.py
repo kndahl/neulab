@@ -1,12 +1,13 @@
 from cmath import inf
 from textwrap import indent
+from bleach import clean
 import pandas as pd
 import numpy as np
-from neulab.Algorithms import IsSymmetric, Mean, StdDeviation, Median
 
 def SimpleOutDetect(dataframe, info=True, autorm=False):
     '''Simple algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
 
+    from neulab.Algorithms import IsSymmetric, Mean, StdDeviation
     for column in dataframe:
         vector = np.array(dataframe[column])
         # Define vector type
@@ -74,6 +75,7 @@ def Chauvenet(dataframe, info=True, autorm=False):
     '''Chauvenet algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
 
     from scipy import special
+    from neulab.Algorithms import Mean, StdDeviation
     import warnings
     warnings.filterwarnings("ignore", category=RuntimeWarning) 
 
@@ -123,6 +125,7 @@ def Chauvenet(dataframe, info=True, autorm=False):
 def Quratile(dataframe, info=True, autorm=False):
     '''Quratile algorithm doest use standart deviation and average mean. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
 
+    from neulab.Algorithms import Median
     dictionary = {}
     for column in dataframe:
         i = 0
@@ -130,9 +133,9 @@ def Quratile(dataframe, info=True, autorm=False):
         if info is True:
             print(f'Checking column: {column}...')
         vector = np.array(dataframe[column])
-        q50 = Median(vector)
-        q25 = Median(vector[vector < q50])
-        q75 = Median(vector[vector > q50])
+        q50 = np.quantile(vector, 0.5)
+        q25 = np.quantile(vector, 0.25)
+        q75 = np.quantile(vector, 0.75)
         interval1 = q25 - 1.5 * (q75 - q25)
         interval2 = q75 + 1.5 * (q75 - q25)
         if info is True:
@@ -152,4 +155,69 @@ def Quratile(dataframe, info=True, autorm=False):
         dictionary.update({column:outliers})
     if dictionary:
         print(f'Detected outliers: {dictionary}')
+    return dataframe
+
+def DistQuant(dataframe, metric='euclid', filter='quantile', info=True, autorm=False):
+    '''An outlier search algorithm using metrics. The metrics calculate the distance between features and then filter using the quantile algorithm. Returns cleared dataframe is autorm is True.'''
+    
+    from neulab.Algorithms import EuclidMertic, ManhattanMetric, MaxMetric, Mean, Median, StdDeviation
+
+    indexes = dataframe.index.to_list()
+    row_list = []
+    row_dict = {}
+    dist_dict = {}
+
+    lenght = len(indexes)
+    for elem in range(lenght):
+        vector = np.array(dataframe.loc[indexes[elem]])
+        row_list.append(vector)
+
+    i = 0
+    for inx in indexes:
+        row_dict.update({inx:row_list[i]})
+        i += 1
+
+    for i1, i2 in row_dict.items():
+        dist = 0
+        for a in row_dict.items():
+            if metric == 'euclid':
+                dist += EuclidMertic(vector1=i2, vector2=a[1])
+            if metric == 'manhattan':
+                dist += ManhattanMetric(vector1=i2, vector2=a[1])
+            if metric == 'max':
+                dist += MaxMetric(vector1=i2, vector2=a[1])
+        dist_dict.update({i1:dist})
+    if info is True:
+        print(f'Distances: {dist_dict}')
+
+    # Find outliers in list of distances (quantile algorithm)
+    if filter == 'quantile':
+        vector = np.array(list(dist_dict.values()))
+
+        def quant_loop(vector):
+            flag = False
+            q25 = np.quantile(vector, 0.25)
+            q75 = np.quantile(vector, 0.75)
+            interval1 = q25 - 1.5 * (q75 - q25)
+            interval2 = q75 + 1.5 * (q75 - q25)
+            i = 0
+            for elem in vector:
+                if interval1 < elem < interval2:
+                    pass
+                else:
+                    flag = True
+                    if info is True:
+                        print(f'Detected outlier: \n{dataframe.loc[[i]]}')
+                    inx = np.where(vector == elem)
+                    vector = np.delete(vector, inx)
+                    if autorm is True:
+                        dataframe.drop(i, inplace=True)
+                i += 1
+            return vector, flag
+        # Repeat algorithm
+        while True:
+            vector, flg = quant_loop(vector=vector)
+            if flg is False:
+                break
+
     return dataframe

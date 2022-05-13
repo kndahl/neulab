@@ -211,10 +211,9 @@ df = pd.DataFrame(data=d)
 
 qurtl = Quratile(dataframe=df, info=True, autorm=True)
 
-Output: Detected outliers: {'col1': [100], 'col2': [50]}
+Output: Detected outliers: {'col1': [-6, 100], 'col2': [50]}
 
 index col1	col2
-0	   -6	   -1
 1	   0	   0
 2	   1	   1
 3	   2	   2
@@ -222,3 +221,25 @@ index col1	col2
 5	   5	   0
 6	   5	   1
 7	   6	   0
+```
+### Metric algorithm
+#### An outlier search algorithm using metrics. The metrics calculate the distance between features and then filter using the quantile algorithm. Returns cleared dataframe is autorm is True.
+```python
+from neulab.OutlierDetection import DistQuant
+
+d = {'col1': [-6, 0, 1, 2, 4, 5, 5, 6, 7, 100], 'col2': [-1, 0, 1, 2, 0, 0, 1, 0, 50, 13]}
+df = pd.DataFrame(data=d)
+
+mdist = DistQuant(dataframe=df, metric='manhattan', filter='quantile', info=True, autorm=True)
+
+Output: Distances: {0: 260.0, 1: 204.0, 2: 198.0, 3: 198.0, 4: 190.0, 5: 190.0, 6: 190.0, 7: 194.0, 8: 566.0, 9: 1014.0}
+
+index col1	col2
+1	   0	0
+2	   1	1
+3      2    2
+4	   4	0
+5	   5	0
+6	   5	1
+7	   6	0
+```
