@@ -113,7 +113,7 @@ cc = CorrelationCoefficient(vector1=df.col1, vector2=df.col2)
 Output: 0.906843948104356
 ```
 
-## Rertore value methods
+## Restore value methods
 ### You have to send df with NaN value. It is important that there is only one NaN in the table..
 Example:
 ```
@@ -223,7 +223,7 @@ index col1	col2
 7	   6	   0
 ```
 ### Metric algorithm
-#### An outlier search algorithm using metrics. The metrics calculate the distance between features and then filter using the quantile algorithm. Returns cleared dataframe is autorm is True.
+#### An outlier search algorithm using metrics. The metrics calculate the distance between features and then filter using the quantile algorithm. Returns cleared dataframe if autorm is True.
 ```python
 from neulab.OutlierDetection import DistQuant
 
