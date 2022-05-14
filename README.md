@@ -1,5 +1,6 @@
 # neulab
 Tool for data preprocess in ML.
+
 # Installation
 ```
 pip install neulab
@@ -11,3 +12,5 @@ pip install neulab
 ## [Restore value methods](docs/README_restore.md)
 
 ## [Outliers Detection](docs/README_out.md)
+
+[![Downloads](https://pepy.tech/badge/neulab)](https://pepy.tech/project/neulab)
