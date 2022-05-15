@@ -102,7 +102,7 @@ Detected outlier:
 Detected outlier: 
    col1  col2
 5   185    13
-index col1	col2
+index 		col1		col2
 1		180		0
 2		188		0
 3		177		0
