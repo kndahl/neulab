@@ -86,3 +86,26 @@ index col1	col2
 6	   5	1
 7	   6	0
 ```
+
+### Dixon’s Q Test
+#### Dixon’s Q test, or just the “Q Test” is a way to find outliers in very small, normally distributed, data sets. Small data sets are usually defined as somewhere between 3 and 7 items. It’s commonly used in chemistry, where data sets sometimes include one suspect observation that’s much lower or much higher than the other values. Keeping an outlier in data affects calculations like the mean and standard deviation, so true outliers should be removed. This test should be used sparingly and never more than once in a data set. Returns cleared dataframe if autorm is True.
+```python
+from neulab.OutlierDetection import DixonTest
+d = {'col1': [2131, 180, 188, 177, 181, 185, 189], 'col2': [0, 0, 0, 0, 1, 13, 1]}
+df = pd.DataFrame(data=d)
+qtest = DixonTest(dataframe=df, q=95, info=True, autorm=True)
+
+Output:
+Detected outlier: 
+   col1  col2
+0  2131     0
+Detected outlier: 
+   col1  col2
+5   185    13
+index col1	col2
+1		180		0
+2		188		0
+3		177		0
+4		181		1
+6		189		1
+```
