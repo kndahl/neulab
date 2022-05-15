@@ -201,21 +201,22 @@ def DistQuant(dataframe, metric='euclid', filter='quantile', info=True, autorm=F
             interval1 = q25 - 1.5 * (q75 - q25)
             interval2 = q75 + 1.5 * (q75 - q25)
             i = 0
+            indexes = dataframe.index.tolist()
             for elem in vector:
                 if interval1 < elem < interval2:
                     pass
                 else:
                     flag = True
                     if info is True:
-                        print(f'Detected outlier: \n{dataframe.loc[[i]]}')
+                        print(f'Detected outlier: \n{dataframe.loc[[indexes[i]]]}')
                     inx = np.where(vector == elem)
                     vector = np.delete(vector, inx)
                     if autorm is True:
-                        dataframe.drop(i, inplace=True)
+                        dataframe.drop(indexes[i], inplace=True)
                 i += 1
             return vector, flag
         # Repeat algorithm
-        while True:
+        while True and len(dataframe.index) > 2:
             vector, flg = quant_loop(vector=vector)
             if flg is False:
                 break
