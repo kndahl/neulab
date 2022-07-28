@@ -224,7 +224,7 @@ def DistQuant(dataframe, metric='euclid', filter='quantile', info=True, autorm=F
     return dataframe
 
 def DixonTest(dataframe, q=95, info=True, autorm=False):
-    '''Dixon Q Test algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
+    '''Dixon Q Test algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True. Q variants: 90, 95, 99.'''
 
     q90 = [0.941, 0.765, 0.642, 0.56, 0.507, 0.468, 0.437,
         0.412, 0.392, 0.376, 0.361, 0.349, 0.338, 0.329,

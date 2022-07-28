@@ -4,7 +4,7 @@ from neulab.Normalization import InterNormalization
 import networkx as nx
 
 def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
-
+    ''' Graph based clustering algorithm. The algorithm itself determines the number of clusters. Returns clusters linked in an array.'''
     # Determine round
     if rnd != 3:
         if type(rnd) == int and rnd > 0:
@@ -108,7 +108,7 @@ def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
 
 
 def CGraphMST(df, clst_num, metric='euclid', rnd=3, draw=False, info=True):
-
+    '''Graph based clustering algorithm.The user himself sets the number of clusters. Returns clusters linked in an array.'''
     # Determine round
     if rnd != 3:
         if type(rnd) == int and rnd > 0:

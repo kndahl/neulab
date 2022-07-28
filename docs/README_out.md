@@ -67,6 +67,12 @@ index col1	col2
 ```
 ### Metric algorithm
 #### An outlier search algorithm using metrics. The metrics calculate the distance between features and then filter using the quantile algorithm. Returns cleared dataframe if autorm is True.
+##### Arguments:
+###### dataframe - DataFrame.
+###### metric - You are able to choose between euclid, manhattan, max. Default - euclid.
+###### filter - Only quantile for today.
+###### info - Print info.
+###### autorm - Delete outliers from DataFrame.
 ```python
 from neulab.OutlierDetection import DistQuant
 
@@ -88,7 +94,12 @@ index col1	col2
 ```
 
 ### Dixon’s Q Test
-#### Dixon’s Q test, or just the “Q Test” is a way to find outliers in very small, normally distributed, data sets. Small data sets are usually defined as somewhere between 3 and 7 items. It’s commonly used in chemistry, where data sets sometimes include one suspect observation that’s much lower or much higher than the other values. Keeping an outlier in data affects calculations like the mean and standard deviation, so true outliers should be removed. This test should be used sparingly and never more than once in a data set. Returns cleared dataframe if autorm is True.
+#### Dixon’s Q test, or just the “Q Test” is a way to find outliers in very small, normally distributed, data sets. Small data sets are usually defined as somewhere between 3 and 7 items. It’s commonly used in chemistry, where data sets sometimes include one suspect observation that’s much lower or much higher than the other values. Keeping an outlier in data affects calculations like the mean and standard deviation, so true outliers should be removed. This test should be used sparingly and never more than once in a data set. Returns cleared dataframe if autorm is True. Q-parametr variants: 90, 95, 99.
+##### Arguments:
+###### dataframe - DataFrame.
+###### q - You are able to choose between 90, 95, 99. Default - 95.
+###### info - Print info.
+###### autorm - Delete outliers from DataFrame.
 ```python
 from neulab.OutlierDetection import DixonTest
 d = {'col1': [2131, 180, 188, 177, 181, 185, 189], 'col2': [0, 0, 0, 0, 1, 13, 1]}
