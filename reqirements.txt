@@ -6,3 +6,5 @@ setuptools
 twine
 pytest
 neulab
+networkx
+matplotlib

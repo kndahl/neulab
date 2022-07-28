@@ -13,4 +13,6 @@ pip install neulab
 
 ## [Outliers Detection](docs/README_out.md)
 
+## [Clustering](docs/README_cluster.md)
+
 [![Downloads](https://pepy.tech/badge/neulab)](https://pepy.tech/project/neulab)
