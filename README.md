@@ -15,4 +15,7 @@ pip install neulab
 
 ## [Clustering](docs/README_cluster.md)
 
+# Community
+Feel free to create pull requests and help us improve the project.
+
 [![Downloads](https://pepy.tech/badge/neulab)](https://pepy.tech/project/neulab)
