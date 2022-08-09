@@ -5,7 +5,9 @@ import pandas as pd
 import numpy as np
 
 def SimpleOutDetect(dataframe, info=True, autorm=False):
-    '''Simple algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
+    '''Simple algorithm. 
+    Remove all outliers from the vector. 
+    Returns cleared dataframe is autorm is True.'''
 
     from neulab.Algorithms import IsSymmetric, Mean, StdDeviation
     for column in dataframe:
@@ -72,7 +74,8 @@ def SimpleOutDetect(dataframe, info=True, autorm=False):
     return dataframe
 
 def Chauvenet(dataframe, info=True, autorm=False):
-    '''Chauvenet algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
+    '''Chauvenet algorithm. Remove all outliers from the vector. 
+    Returns cleared dataframe is autorm is True.'''
 
     from scipy import special
     from neulab.Algorithms import Mean, StdDeviation
@@ -123,7 +126,9 @@ def Chauvenet(dataframe, info=True, autorm=False):
     return dataframe
 
 def Quratile(dataframe, info=True, autorm=False):
-    '''Quratile algorithm doest use standart deviation and average mean. Remove all outliers from the vector. Returns cleared dataframe is autorm is True.'''
+    '''Quratile algorithm doest use standart deviation and average mean. 
+    Remove all outliers from the vector. 
+    Returns cleared dataframe is autorm is True.'''
 
     from neulab.Algorithms import Median
     dictionary = {}
@@ -158,9 +163,11 @@ def Quratile(dataframe, info=True, autorm=False):
     return dataframe
 
 def DistQuant(dataframe, metric='euclid', filter='quantile', info=True, autorm=False):
-    '''An outlier search algorithm using metrics. The metrics calculate the distance between features and then filter using the quantile algorithm. Returns cleared dataframe is autorm is True.'''
+    '''An outlier search algorithm using metrics. 
+    The metrics calculate the distance between features and then filter using the quantile algorithm. 
+    Returns cleared dataframe is autorm is True.'''
     
-    from neulab.Algorithms import EuclidMertic, ManhattanMetric, MaxMetric, Mean, Median, StdDeviation
+    from neulab.Algorithms import EuclidMetric, ManhattanMetric, MaxMetric, Mean, Median, StdDeviation
 
     indexes = dataframe.index.to_list()
     row_list = []
@@ -181,7 +188,7 @@ def DistQuant(dataframe, metric='euclid', filter='quantile', info=True, autorm=F
         dist = 0
         for a in row_dict.items():
             if metric == 'euclid':
-                dist += EuclidMertic(vector1=i2, vector2=a[1])
+                dist += EuclidMetric(vector1=i2, vector2=a[1])
             if metric == 'manhattan':
                 dist += ManhattanMetric(vector1=i2, vector2=a[1])
             if metric == 'max':
@@ -224,7 +231,10 @@ def DistQuant(dataframe, metric='euclid', filter='quantile', info=True, autorm=F
     return dataframe
 
 def DixonTest(dataframe, q=95, info=True, autorm=False):
-    '''Dixon Q Test algorithm. Remove all outliers from the vector. Returns cleared dataframe is autorm is True. Q variants: 90, 95, 99.'''
+    '''Dixon Q Test algorithm.
+    Remove all outliers from the vector. 
+    Returns cleared dataframe is autorm is True. 
+    Q variants: 90, 95, 99.'''
 
     q90 = [0.941, 0.765, 0.642, 0.56, 0.507, 0.468, 0.437,
         0.412, 0.392, 0.376, 0.361, 0.349, 0.338, 0.329,

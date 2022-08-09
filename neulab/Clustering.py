@@ -1,10 +1,14 @@
 from numpy import spacing
-from neulab.Algorithms import ManhattanMetric, EuclidMertic, MaxMetric, Median
+from neulab.Algorithms import ManhattanMetric, EuclidMetric, MaxMetric, Median
 from neulab.Normalization import InterNormalization
 import networkx as nx
+import numpy as np
 
 def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
-    ''' Graph based clustering algorithm. The algorithm itself determines the number of clusters. Returns clusters linked in an array.'''
+    ''' Graph based clustering algorithm. 
+    The algorithm itself determines the number of clusters. 
+    Returns clusters linked in an array.'''
+
     # Determine round
     if rnd != 3:
         if type(rnd) == int and rnd > 0:
@@ -23,7 +27,7 @@ def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
             if metric == 'manhattan':
                 DIST = round(ManhattanMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             if metric == 'euclid':
-                DIST = round(EuclidMertic(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
+                DIST = round(EuclidMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             if metric == 'max':
                 DIST = round(MaxMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             INDEX1 = df.index.values[x]
@@ -108,7 +112,10 @@ def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
 
 
 def CGraphMST(df, clst_num, metric='euclid', rnd=3, draw=False, info=True):
-    '''Graph based clustering algorithm.The user himself sets the number of clusters. Returns clusters linked in an array.'''
+    '''Graph based clustering algorithm. 
+    The user himself sets the number of clusters. 
+    Returns clusters linked in an array.'''
+
     # Determine round
     if rnd != 3:
         if type(rnd) == int and rnd > 0:
@@ -127,7 +134,7 @@ def CGraphMST(df, clst_num, metric='euclid', rnd=3, draw=False, info=True):
             if metric == 'manhattan':
                 DIST = round(ManhattanMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             if metric == 'euclid':
-                DIST = round(EuclidMertic(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
+                DIST = round(EuclidMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             if metric == 'max':
                 DIST = round(MaxMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             INDEX1 = df.index.values[x]
@@ -193,3 +200,59 @@ def CGraphMST(df, clst_num, metric='euclid', rnd=3, draw=False, info=True):
         print(f'Found clusters: {all_connected_subgraphs}')
 
     return all_connected_subgraphs
+
+def CForel(df, R=None, info=True, draw=False):
+    ''' FOREL clustering algorithm. The algorithm itself determines the number of clusters. 
+    The R parameter is very important. You can try set R manually, 
+    I recommend you to use the sliding R search method (highest to lowest).'''
+
+    points = {}
+    for index, row in df.iterrows():
+        points.update({index: row.to_numpy()})
+    if info is True:
+        print(f'Points: {points}')
+
+    # If R is not defined 
+    if R is None:
+        from itertools import combinations
+        from neulab.Algorithms import EuclidMetric, Mean
+
+        combs = combinations(list(points.values()), 2)
+        dist = list(map(lambda x: EuclidMetric(*x), list(combs)))
+        R = Mean(dist)/2
+        print('R parameter was automaticly calculated.')
+    if info is True:
+        print(f'R = {R}')
+
+    def forel(points, radius, tol=1e-1):
+        centroids = []
+        while len(points) != 0:
+            current_point = get_random_point(points)
+            neighbors = get_neighbors(current_point, radius, points)
+            centroid = get_centroid(neighbors)
+            while np.linalg.norm(current_point - centroid) > tol:
+                current_point = centroid
+                neighbors = get_neighbors(current_point, radius, points)
+                centroid = get_centroid(neighbors)
+            points = remove_points(neighbors, points)
+            centroids.append(current_point)
+        return centroids
+
+    def get_neighbors(p, radius, points):
+        neighbors = [point for point in points if np.linalg.norm(p - point) < radius]
+        return np.array(neighbors)
+
+    def get_centroid(points):
+        return np.mean(points, axis=0)
+
+    def get_random_point(points):
+        random_index = np.random.choice(len(points), 1)[0]
+        return points[random_index]
+
+    def remove_points(subset, points):
+        points = [p for p in points if p not in subset]
+        return points
+
+    centroids = forel(points=list(points.values()), radius=R)
+    if info is True:
+        print(f'Centroids: {centroids}')

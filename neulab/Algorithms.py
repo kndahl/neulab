@@ -11,7 +11,7 @@ def CorrelationCoefficient(vector1, vector2):
     cor_coef = np.corrcoef(v1, v2)
     return cor_coef[0][1]
 
-def EuclidMertic(vector1, vector2):
+def EuclidMetric(vector1, vector2):
     '''Returns Euclidean distance between vector1 and vector2.'''
 
     point_1 = np.array(vector1)

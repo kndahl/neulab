@@ -58,12 +58,12 @@ Output: True
 ### Euclid metric
 #### Algorithm for calculating the distance using the Euclidean metric
 ```python
-from neulab.Algorithms import EuclidMertic
+from neulab.Algorithms import EuclidMetric
 
 d = {'col1': [0, 1, 2], 'col2': [2, 1, 0]}
 df = pd.DataFrame(data=d)
 
-euqld  = EuclidMertic(vector1=df.col1, vector2=df.col2) 
+euqld  = EuclidMetric(vector1=df.col1, vector2=df.col2) 
 
 Output: 2.8284271247461903
 ```

@@ -21,7 +21,7 @@ def test_Mode():
 def test_Euclid():
     d = {'col1': [0, 1, 2], 'col2': [2, 1, 0]}
     df = pd.DataFrame(data=d)
-    assert EuclidMertic(vector1=df.col1, vector2=df.col2) == 2.8284271247461903
+    assert EuclidMetric(vector1=df.col1, vector2=df.col2) == 2.8284271247461903
 
 def test_Manhattan():
     d = {'col1': [0, 1, 2], 'col2': [2, 1, 0]}
