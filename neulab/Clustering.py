@@ -353,10 +353,10 @@ class Forel:
             self.__visualise()
         return df
 
-def KMeans(data):
+def KMeans(data, num_clusters):
     from sklearn.cluster import KMeans
 
-    cluster = KMeans(n_clusters=3)
+    cluster = KMeans(n_clusters=num_clusters)
     model = cluster.fit(data)
     data['cluster'] = model.labels_
     return data
