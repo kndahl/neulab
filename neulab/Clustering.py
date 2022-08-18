@@ -112,9 +112,6 @@ def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
 
     return all_connected_subgraphs
 
-
-
-
 def CGraphMST(df, clst_num, metric='euclid', rnd=3, draw=False, info=True):
     '''Graph based clustering algorithm. 
     The user himself sets the number of clusters. 
@@ -217,7 +214,7 @@ class Forel:
         df = pd.read_csv('tests/csv/iris.csv').drop('Name', axis = 1)
         forel = Forel(data=df, verbose=True, scale = True, radius = 60)
         cluster = forel.get_clusters()
-        
+
     """
 
     def __init__(self, data, radius=None, metric=EuclidMetric, scale=False, verbose=False):
@@ -343,6 +340,12 @@ class Forel:
         df['cluster'], df['cluster_center'] = zip(*df.point.apply(lambda x: self.__cluster_mapping(x)))
         return df
 
+    def __visualise(self):
+        """
+        Function for clusters visualisation
+        """
+        pd.plotting.parallel_coordinates(self.__detect_clusters().drop(['point', 'cluster_center'], axis = 1), 'cluster')
+
     def get_clusters(self):
         self.__get_centroids()
         df = self.__detect_clusters()
@@ -350,8 +353,10 @@ class Forel:
             self.__visualise()
         return df
 
-    def __visualise(self):
-        """
-        Function for clusters visualisation
-        """
-        pd.plotting.parallel_coordinates(self.__detect_clusters().drop(['point', 'cluster_center'], axis = 1), 'cluster')
+def KMeans(data):
+    from sklearn.cluster import KMeans
+
+    cluster = KMeans(n_clusters=3)
+    model = cluster.fit(data)
+    data['cluster'] = model.labels_
+    return data
