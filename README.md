@@ -15,6 +15,9 @@ pip install neulab
 
 ## [Clustering](docs/README_cluster.md)
 
+# Updates
+[0.0.24](docs/vers_hist/0.0.24.md)
+
 # Community
 Feel free to create pull requests and help us improve the project.
 

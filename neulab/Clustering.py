@@ -3,6 +3,10 @@ from neulab.Algorithms import ManhattanMetric, EuclidMetric, MaxMetric, Median
 from neulab.Normalization import InterNormalization
 import networkx as nx
 import numpy as np
+from neulab.Algorithms import EuclidMetric, Mean
+from itertools import combinations
+from sklearn.preprocessing import MinMaxScaler
+import pandas as pd
 
 def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
     ''' Graph based clustering algorithm. 
@@ -201,12 +205,6 @@ def CGraphMST(df, clst_num, metric='euclid', rnd=3, draw=False, info=True):
 
     return all_connected_subgraphs
 
-
-from neulab.Algorithms import EuclidMetric, Mean
-from itertools import combinations
-from sklearn.preprocessing import MinMaxScaler
-import pandas as pd
-
 class Forel:
     """
     A class representing FOREL clustering algorithm. 
@@ -258,8 +256,8 @@ class Forel:
     
         for index, row in self.data.iterrows():
             self.points.update({index: row.to_numpy()})
-        if self.verbose:
-            print(f'Points: {self.points}')
+        # if self.verbose:
+        #     print(f'Points: {self.points}')
         
         if radius is None:
             combs = combinations(list(self.points.values()), 2)
@@ -313,9 +311,9 @@ class Forel:
         points = [p for p in points if list(p) not in subset]
         return points
 
-    def get_centroids(self, tol=1e-5):
+    def __get_centroids(self, tol=1e-5):
         """
-        Finction with FOREL algorithm
+        Function with FOREL algorithm
         """
         self.centroids = []
         points = list(self.points.values())
@@ -338,7 +336,7 @@ class Forel:
             if self.__in_cluster(self.centroids[i], point):
                 return f"cluster {i+1}", self.centroids[i]
 
-    def get_clusters(self):
+    def __detect_clusters(self):
         """
         Returns df with resulting clusters
         """
@@ -348,8 +346,15 @@ class Forel:
         df['cluster'], df['cluster_center'] = zip(*df.point.apply(lambda x: self.__cluster_mapping(x)))
         return df
 
-    def visualise(self):
+    def get_clusters(self):
+        self.__get_centroids()
+        df = self.__detect_clusters()
+        if self.verbose:
+            self.__visualise()
+        return df
+
+    def __visualise(self):
         """
         Function for clusters visualisation
         """
-        pd.plotting.parallel_coordinates(self.get_clusters().drop(['point', 'cluster_center'], axis = 1), 'cluster')
+        pd.plotting.parallel_coordinates(self.__detect_clusters().drop(['point', 'cluster_center'], axis = 1), 'cluster')
