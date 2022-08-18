@@ -215,11 +215,8 @@ class Forel:
         import pandas as pd
 
         df = pd.read_csv('tests/csv/iris.csv').drop('Name', axis = 1)
-        cluster = Forel(data=df, verbose=True, scale = True, radius = 60)
-        cluster.get_centroids()
-        result = cluster.get_clusters()
-        cluster.visualise()
-
+        forel = Forel(data=df, verbose=True, scale = True, radius = 60)
+        cluster = forel.get_clusters()
         
     """
 
