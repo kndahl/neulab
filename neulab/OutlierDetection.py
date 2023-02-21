@@ -9,11 +9,11 @@ def SimpleOutDetect(dataframe, info=True, autorm=False):
     Remove all outliers from the vector. 
     Returns cleared dataframe is autorm is True.'''
 
-    from neulab.Algorithms import IsSymmetric, Mean, StdDeviation
+    from neulab.Algorithms import is_symmetric, std_deviation
     for column in dataframe:
         vector = np.array(dataframe[column])
         # Define vector type
-        if IsSymmetric(vector=vector):
+        if is_symmetric(vector=vector):
             if info is True:
                 print(f'Vector {column} is symmetric.')
             i = 0
@@ -21,8 +21,8 @@ def SimpleOutDetect(dataframe, info=True, autorm=False):
             dict = {}
             for elem in vector:
                 cleared = np.delete(vector, i)
-                mean = Mean(vector=cleared)
-                std = StdDeviation(vector=cleared)
+                mean = np.mean(cleared)
+                std = std_deviation(vector=cleared)
                 interval1 = mean - 3 * std
                 interval2 = mean + 3 * std
                 if interval1 < elem < interval2:
@@ -47,8 +47,8 @@ def SimpleOutDetect(dataframe, info=True, autorm=False):
             dict = {}
             for elem in vector:
                 cleared = np.delete(vector, i)
-                mean = Mean(vector=cleared)
-                std = StdDeviation(vector=cleared)
+                mean = mean(vector=cleared)
+                std = std_deviation(vector=cleared)
                 interval1 = mean - 3 * std
                 interval2 = mean + 3 * std
                 if interval1 < elem < interval2:
@@ -78,7 +78,7 @@ def Chauvenet(dataframe, info=True, autorm=False):
     Returns cleared dataframe is autorm is True.'''
 
     from scipy import special
-    from neulab.Algorithms import Mean, StdDeviation
+    from neulab.Algorithms import std_deviation
     import warnings
     warnings.filterwarnings("ignore", category=RuntimeWarning) 
 
@@ -88,7 +88,7 @@ def Chauvenet(dataframe, info=True, autorm=False):
         else:
             outliers = list(dict.fromkeys(outliers))
         for elem in vector:
-            is_out_cond = special.erfc(np.abs(elem - Mean(vector=vector))/StdDeviation(vector=vector)) < 1 / (2 * len(vector))
+            is_out_cond = special.erfc(np.abs(elem - np.mean(vector))/std_deviation(vector=vector)) < 1 / (2 * len(vector))
             if is_out_cond:
                 outliers.append(elem)
                 if autorm is True:
@@ -109,7 +109,7 @@ def Chauvenet(dataframe, info=True, autorm=False):
         outliers = []
         dictionary = {}
         for elem in vector:
-            is_out_cond = special.erfc(np.abs(elem - Mean(vector=vector))/StdDeviation(vector=vector)) < 1 / (2 * len(vector))
+            is_out_cond = special.erfc(np.abs(elem - np.mean(vector))/std_deviation(vector=vector)) < 1 / (2 * len(vector))
             if is_out_cond:
                 outliers.append(elem)
                 if autorm is True:
@@ -130,7 +130,6 @@ def Quratile(dataframe, info=True, autorm=False):
     Remove all outliers from the vector. 
     Returns cleared dataframe is autorm is True.'''
 
-    from neulab.Algorithms import Median
     dictionary = {}
     for column in dataframe:
         i = 0
@@ -167,7 +166,7 @@ def DistQuant(dataframe, metric='euclid', filter='quantile', info=True, autorm=F
     The metrics calculate the distance between features and then filter using the quantile algorithm. 
     Returns cleared dataframe is autorm is True.'''
     
-    from neulab.Algorithms import EuclidMetric, ManhattanMetric, MaxMetric, Mean, Median, StdDeviation
+    from neulab.Algorithms import euclidean_distance, manhattan_distance, max_metric, std_deviation
 
     indexes = dataframe.index.to_list()
     row_list = []
@@ -188,11 +187,11 @@ def DistQuant(dataframe, metric='euclid', filter='quantile', info=True, autorm=F
         dist = 0
         for a in row_dict.items():
             if metric == 'euclid':
-                dist += EuclidMetric(vector1=i2, vector2=a[1])
+                dist += euclidean_distance(vector1=i2, vector2=a[1])
             if metric == 'manhattan':
-                dist += ManhattanMetric(vector1=i2, vector2=a[1])
+                dist += manhattan_distance(vector1=i2, vector2=a[1])
             if metric == 'max':
-                dist += MaxMetric(vector1=i2, vector2=a[1])
+                dist += max_metric(vector1=i2, vector2=a[1])
         dist_dict.update({i1:dist})
     if info is True:
         print(f'Distances: {dist_dict}')

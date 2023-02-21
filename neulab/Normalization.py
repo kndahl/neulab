@@ -7,7 +7,7 @@ def InterNormalization(column):
     inter_normalization = (vector - min(vector))/(max(vector) - min(vector))
     return inter_normalization
 
-def MeanNormalization(column):
+def meanNormalization(column):
     ''' Normalization function that normalize data in column by mean algotithm '''
 
     vector = np.array(column)

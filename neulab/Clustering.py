@@ -1,9 +1,9 @@
 from numpy import spacing
-from neulab.Algorithms import ManhattanMetric, EuclidMetric, MaxMetric, Median
+from neulab.Algorithms import manhattan_distance, euclidean_distance, max_metric
 from neulab.Normalization import InterNormalization
 import networkx as nx
 import numpy as np
-from neulab.Algorithms import EuclidMetric, Mean
+from neulab.Algorithms import euclidean_distance
 from itertools import combinations
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
@@ -29,11 +29,11 @@ def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
     for x in range(len(indx)-1):
         for i in range(len(indx)-1):
             if metric == 'manhattan':
-                DIST = round(ManhattanMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
+                DIST = round(manhattan_distance(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             if metric == 'euclid':
-                DIST = round(EuclidMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
+                DIST = round(euclidean_distance(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             if metric == 'max':
-                DIST = round(MaxMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
+                DIST = round(max_metric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             INDEX1 = df.index.values[x]
             INDEX2 = df.index.values[i+1]
             if INDEX1 == INDEX2: # Do not calculate dist between AA, BB, CC, DD etc.
@@ -58,14 +58,14 @@ def CGraph(df, metric='euclid', r='std', rnd=3, draw=False, info=True):
 
     # Calculate maen value of all distances (R)
     # TODO: Looks like R is not well calculated
-    from neulab.Algorithms import Mean, Median, StdDeviation
+    from neulab.Algorithms import std_deviation
     dist_list = list(distances.values())
     if r == 'std':
-        R = round(StdDeviation(vector=dist_list), ROUND)
+        R = round(std_deviation(vector=dist_list), ROUND)
     if r == 'mean':
-        R = round(Mean(vector=dist_list), ROUND)
+        R = round(np.mean(vector=dist_list), ROUND)
     if r == 'median':
-        R = round(Median(vector=dist_list), ROUND)
+        R = round(np.median(vector=dist_list), ROUND)
     if info is True:
         print(f'R = {R}')
 
@@ -133,11 +133,11 @@ def CGraphMST(df, clst_num, metric='euclid', rnd=3, draw=False, info=True):
     for x in range(len(indx)-1):
         for i in range(len(indx)-1):
             if metric == 'manhattan':
-                DIST = round(ManhattanMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
+                DIST = round(manhattan_distance(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             if metric == 'euclid':
-                DIST = round(EuclidMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
+                DIST = round(euclidean_distance(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             if metric == 'max':
-                DIST = round(MaxMetric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
+                DIST = round(max_metric(vector1=df.loc[indx[x]], vector2=df.loc[indx[i+1]]), ROUND)
             INDEX1 = df.index.values[x]
             INDEX2 = df.index.values[i+1]
             if INDEX1 == INDEX2: # Do not calculate dist between AA, BB, CC, DD etc.
@@ -217,7 +217,7 @@ class Forel:
 
     """
 
-    def __init__(self, data, radius=None, metric=EuclidMetric, scale=False, verbose=False):
+    def __init__(self, data, radius=None, metric=euclidean_distance, scale=False, verbose=False):
 
         """
         Init function
@@ -228,7 +228,7 @@ class Forel:
         Precondition: radius equals mean distance between objects divided by 2
 
         Parameter metric: metric function used to calculate distance between objects
-        Precondition: neulab.Algorithms.EuclidMetric
+        Precondition: neulab.Algorithms.euclidean_distance
 
         Parameter scale: If true all object parametres scaled in [0, 100]
         Precondition: False
@@ -256,7 +256,7 @@ class Forel:
         if radius is None:
             combs = combinations(list(self.points.values()), 2)
             dist = list(map(lambda x: self.metric(*x), list(combs)))
-            self.radius = Mean(dist)/2
+            self.radius = mean(dist)/2
             if verbose:
                 print('R parameter was automaticly calculated.')
                 print(f'R = {self.radius}')
@@ -353,10 +353,10 @@ class Forel:
             self.__visualise()
         return df
 
-def KMeans(data, num_clusters):
-    from sklearn.cluster import KMeans
+def Kmeans(data, num_clusters):
+    from sklearn.cluster import Kmeans
 
-    cluster = KMeans(n_clusters=num_clusters)
+    cluster = Kmeans(n_clusters=num_clusters)
     model = cluster.fit(data)
     data['cluster'] = model.labels_
     return data

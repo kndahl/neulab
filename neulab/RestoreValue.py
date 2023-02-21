@@ -1,17 +1,17 @@
 import numpy as np
 import pandas as pd
 
-def MeanRestore(column):
+def meanRestore(column):
     '''Replace missing value with mean. Returns value to restore.'''
     
-    from neulab.Algorithms import Mean
-    return Mean(column=column)
+    from neulab.Algorithms import mean
+    return mean(column=column)
 
-def MedianRestore(column):
+def medianRestore(column):
     '''Replace missing value with median. Returns value to restore.'''
 
-    from neulab.Algorithms import Median
-    return Median(column=column)
+    from neulab.Algorithms import median
+    return median(column=column)
 
 def ModeRestore(column):
     '''Replace missing value with mode. Returns value to restore.''' 
@@ -22,7 +22,7 @@ def ModeRestore(column):
 def CorrCoefRestore(df, row_start, row_end):
     '''Replace missing value with CorrCoef value. Returns value to restore.'''
 
-    from neulab.Algorithms import CorrelationCoefficient, Mean
+    from neulab.Algorithms import correlation_coefficient
     df = df.iloc[row_start : row_end]
     inds = df.loc[pd.isna(df).any(1), :].index # Find where is None value
     try: # If inds exists
@@ -33,9 +33,9 @@ def CorrCoefRestore(df, row_start, row_end):
         coefs_weights = []
         for column in df.columns:
             if column != nan_col:
-                coef_list.append(round(CorrelationCoefficient(df_cut[nan_col], df_cut[column]), 2))
-                coefs_weights.append(round(coef_list[-1] * (df[column].iloc[inds] - Mean(df_cut[column])), 2))
-        PA = round(Mean(df_cut[nan_col]) + 1/(sum(np.abs(coef_list))) * sum(coefs_weights), 2)
+                coef_list.append(round(correlation_coefficient(df_cut[nan_col], df_cut[column]), 2))
+                coefs_weights.append(round(coef_list[-1] * (df[column].iloc[inds] - np.mean(df_cut[column])), 2))
+        PA = round(np.mean(df_cut[nan_col]) + 1/(sum(np.abs(coef_list))) * sum(coefs_weights), 2)
         return PA
     except IndexError:
         return
@@ -43,7 +43,7 @@ def CorrCoefRestore(df, row_start, row_end):
 def MetricRestore(df, row_start, row_end, metric):
     '''Replace missing value with Metric value. Returns value to restore.'''
 
-    from neulab.Algorithms import EuclidMetric, ManhattanMetric, MaxMetric
+    from neulab.Algorithms import euclidean_distance, manhattan_distance, max_metric
     df = df.iloc[row_start : row_end+1]
     inds_col = df.columns[df.isna().any()].tolist() # Find where is None value (col)
     inds_row = df.loc[pd.isna(df).any(1), :].index[0] # Find where is None value (row)
@@ -59,10 +59,10 @@ def MetricRestore(df, row_start, row_end, metric):
     for index, row in df_cut.iterrows():
         if index != inds_row:
             if metric == 'euclid':
-                dist_list.append(round(EuclidMetric(vector1=df_cut.iloc[inds_row], vector2=row), 2))
+                dist_list.append(round(euclidean_distance(vector1=df_cut.iloc[inds_row], vector2=row), 2))
             if metric == 'manhattan':
-                dist_list.append(round(ManhattanMetric(vector1=df_cut.iloc[inds_row], vector2=row), 2))
+                dist_list.append(round(manhattan_distance(vector1=df_cut.iloc[inds_row], vector2=row), 2))
             if metric == 'max':
-                dist_list.append(round(MaxMetric(vector1=df_cut.iloc[inds_row], vector2=row), 2))
+                dist_list.append(round(max_metric(vector1=df_cut.iloc[inds_row], vector2=row), 2))
     DISTANCE = round(1/(sum([1/i for i in dist_list])) * sum([v/d for v, d in zip(val_list, dist_list)]), 2)
     return DISTANCE
