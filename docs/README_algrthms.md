@@ -82,12 +82,12 @@ Output: 4.0
 ### Max Metric
 #### Algorithm for calculating the distance using the Max metric
 ```python
-from neulab.Algorithms import max_metric
+from neulab.Algorithms import max_distance
 
 d = {'col1': [0, 1, 2], 'col2': [2, 1, 0]}
 df = pd.DataFrame(data=d)
 
-mx = max_metric(vector1=df.col1, vector2=df.col2)
+mx = max_distance(vector1=df.col1, vector2=df.col2)
 
 Output: 2
 ```
