@@ -129,7 +129,7 @@ def replace_missing_with_corrcoef(*vectors):
         return vector, np.nan
     
     # Calculate the correlation coefficient between non-missing values and missing indices
-    corr_coef = correlation_coefficient(nonmissing_indices, vector[nonmissing_indices])[0,1]
+    corr_coef = correlation_coefficient(nonmissing_indices, vector[nonmissing_indices])[0]
     
     if np.isnan(corr_coef):
         # If the correlation coefficient is NaN, return the input vector and NaN correlation
@@ -197,11 +197,11 @@ def replace_missing_with_distance(*vectors, metric='euclidean', how='vertical'):
     for i in range(vector_array.shape[0]-1):
         if  i != indices:
             if metric == 'euclidean':
-                distances.append(euclidean_distance(vector_array[i], vector_array[-1]))
+                distances.append(euclidean_distance(vector_array[i], vector_array[-1])[0])
             if metric == 'manhattan':
-                distances.append(manhattan_distance(vector_array[i], vector_array[-1]))
+                distances.append(manhattan_distance(vector_array[i], vector_array[-1])[0])
             if metric == 'max':
-                distances.append(max_distance(vector_array[i], vector_array[-1]))
+                distances.append(max_distance(vector_array[i], vector_array[-1])[0])
 
     # Get row with nan
     val_list = vec_arr_copy[indices[0][0]]

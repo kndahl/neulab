@@ -2,31 +2,38 @@ import numpy as np
 import warnings
 
 def correlation_coefficient(*vectors):
-    """Returns correlation matrix between vectors."""
+    """Returns list of correlation coefficients between all pairs of input vectors."""
     n_vectors = len(vectors)
-
+    corr_coef_list = []
+    
     # Check that the input vectors have the same shape.
     shape = np.array([len(v) for v in vectors])
     if np.any(shape != shape[0]):
         raise ValueError("Input vectors must have the same shape")
 
-    # Center each vector around its mean.
-    centered = [v - np.mean(v) for v in vectors]
+    for i in range(n_vectors):
+        for j in range(i+1, n_vectors):
+            # Center each vector around its mean.
+            centered_i = vectors[i] - np.mean(vectors[i])
+            centered_j = vectors[j] - np.mean(vectors[j])
 
-    # Calculate the covariance matrix and standard deviation vector.
-    cov = np.cov(centered)
-    stds = np.sqrt(np.diag(cov))
+            # Calculate the covariance and standard deviation.
+            cov = np.sum(centered_i * centered_j) / (len(centered_i) - 1)
+            std_i = np.std(centered_i, ddof=1)
+            std_j = np.std(centered_j, ddof=1)
 
-    # Calculate the correlation matrix.
-    corr_coef = cov / np.outer(stds, stds)
+            # Calculate the correlation coefficient.
+            corr_coef = cov / (std_i * std_j)
 
-    return corr_coef
+            corr_coef_list.append(corr_coef)
+
+    return corr_coef_list
 
 
 def euclidean_distance(*vectors):
     """Returns Euclidean distance between all pairs of vectors."""
     n = len(vectors)
-    distances = 0
+    distances = []
     
     for i in range(n):
         for j in range(i+1, n):
@@ -41,8 +48,7 @@ def euclidean_distance(*vectors):
             if np.isnan(point1).any() or np.isnan(point2).any():
                 warnings.warn("Input arrays contains NaN values")
     
-            distance = np.sqrt(np.sum((point1 - point2) ** 2))
-            distances += distance
+            distances.append(np.sqrt(np.sum((point1 - point2) ** 2)))
 
     return distances
 
@@ -50,7 +56,7 @@ def euclidean_distance(*vectors):
 def manhattan_distance(*vectors):
     """Returns Manhattan distances between all pairs of vectors."""
     n = len(vectors)
-    distances = 0
+    distances = []
     
     for i in range(n):
         for j in range(i+1, n):
@@ -66,8 +72,7 @@ def manhattan_distance(*vectors):
                 warnings.warn("Input arrays contains NaN values")
         
             # Compute the Manhattan distance.
-            distance = np.sum(np.abs(point1 - point2))
-            distances += distance
+            distances.append(np.sum(np.abs(point1 - point2)))
         
     return distances
 
@@ -75,7 +80,7 @@ def manhattan_distance(*vectors):
 def max_distance(*vectors):
     """Returns Max distance between all pairs of vectors."""
     n = len(vectors)
-    distances = 0
+    distances = []
 
     for i in range(n):
         for j in range(i+1, n):
@@ -91,8 +96,7 @@ def max_distance(*vectors):
                 warnings.warn("Input arrays contains NaN values")
 
             # Compute the istance distance.
-            distance = np.max(np.abs(point1 - point2))
-            distances += distance
+            distances.append(np.max(np.abs(point1 - point2)))
 
     return distances
 
