@@ -7,9 +7,11 @@ pip install neulab
 ```
 # Usage
 
-## [Algorithms](docs/README_algrthms.md)
+## [Data discover](docs/README_discover.md)
 
 ## [Restore value methods](docs/README_restore.md)
+
+## [Normalization](docs/README_normalization.md)
 
 ## [Outliers Detection](docs/README_out.md)
 

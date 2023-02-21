@@ -101,15 +101,15 @@ def max_distance(*vectors):
     return distances
 
 
-def std_deviation(vector):
+def std_deviation(*vectors):
     """Calculates standard deviation."""
-    vector = np.array(vector)
-    std = np.std(vector, ddof=1)
+    n = len(vectors)
+    std = []
+
+    for i in range(n):
+        vector = np.array(vectors[i])
+        std.append(np.std(vector, ddof=1))
+    if n == 1:
+        return std[0]
     return std
 
-
-def is_symmetric(vector):
-    """Detects if vector is symmetric or asymmetric.
-    Returns True if vector is symmetric or False if vector is asymmetric."""
-    vectype = np.abs(np.median(vector) - np.mean(vector)) <= 3 * np.sqrt((std_deviation(vector=vector) ** 2) / len(vector))
-    return vectype

@@ -1,39 +1,62 @@
-### You have to send df with NaN value. It is important that there is only one NaN in the table..
-Example:
-```
-   P1  P2  P3  P4   P5
-0   3   4   5   3  4.0
-1   5   5   5   4  3.0
-2   4   3   3   2  5.0
-3   5   4   3   3  NaN
-```
-### Recovery with metrics
+# Restore data using mean value
+### Function returns the new vector and the mean value.
 ```python
-from neulab.RestoreValue import MetricRestore
+from neulab.recover import replace_missing_with_mean
 
-d = {'P1': [3, 5, 4, 5], 'P2': [4, 5, 3, 4], 'P3': [5, 5, 3, 3], 'P4': [3, 4, 2, 3], 'P5': [4, 3, 5, np.NaN]}
-df = pd.DataFrame(data=d)
+v1 = [1, np.nan, 3, np.nan, 5, 5]
+vector, mean_value = replace_missing_with_mean(v1)
 
-# Euclid
-euclid_m = MetricRestore(df, row_start=0, row_end=9, metric='euclid')
-# Manhattan
-mnht_m = MetricRestore(df, row_start=0, row_end=9, metric='manhattan')
-# Max
-mx_m = MetricRestore(df, row_start=0, row_end=9, metric='max')
+Output: (array([1. , 3.5, 3. , 3.5, 5. , 5. ]), 3.5)
+```
+# Restore data using median value
+### Function returns the new vector and the median value.
+```python
+from neulab.recover import replace_missing_with_median
+
+v1 = [1, np.nan, 3, np.nan, 5, 5]
+vector, median_value = replace_missing_with_median(v1)
+
+Output: (array([1., 4., 3., 4., 5., 5.]), 4.0)
+```
+# Restore data using mode value
+### Function returns the new vector and the mode value.
+```python
+from neulab.recover import replace_missing_with_mode
+
+v1 = [1, np.nan, 3, np.nan, 5, 5]
+vector, mode_value = replace_missing_with_mode(v1)
+
+Output: (array([1., 5., 3., 5., 5., 5.]), 5.0)
+```
+# Restore data using correlation coefficient value
+### Function returns the new vector and the correlation coefficient value.
+```python
+from neulab.recover import replace_missing_with_corrcoef
+
+v1 = np.array([1, 2, np.nan, 4, np.nan, 6, np.nan, np.nan])
+new_vector, corrvalue = replace_missing_with_corrcoef(v1)
+
+Output: (array([1., 2., 3., 4., 5., 6., 7., 8.]), 1.0)
+```
+# Restore data using distance value
+### Function returns the new vector and the distance value.
+```python
+from neulab.recover import replace_missing_with_distance
+
+v1 = [3, 5, 4, 5]
+v2 = [4, 5, 3, 4]
+v3 = [5, 5, 3, 3]
+v4 = [3, 4, 2, 3]
+v5 = [4, 3, 5, np.nan]
+
+vector = np.vstack((v1, v2, v3, v4, v5))
+new_vector, dist = replace_missing_with_distance(vector, metric='euclidean', how='vertical')
 
 Output: 
-euclid_m = 4.13
-mnht_m = 4.1
-mx_m = 4.25
-```
-### Recovery with correlation coefficient
-```python
-from neulab.RestoreValue import CorrCoefRestore
-
-d = {'G': [99, 89, 91, 91, 86, 97, np.NaN], 'T': [56, 58, 64, 51, 56, 53, 51], 'B': [91, 89, 91, 91, 84, 86, 91], 'R': [160, 157, 165, 170, 157, 175, 165], 'W': [58, 48, 54, 54, 44, 56, 54]}
-df = pd.DataFrame(data=d)
-
-cc = CorrCoefRestore(df=df, row_start=0, row_end=9)
-
-Output: 94.21
+(array([[3.  , 5.  , 4.  , 5.  ],
+        [4.  , 5.  , 3.  , 4.  ],
+        [5.  , 5.  , 3.  , 3.  ],
+        [3.  , 4.  , 2.  , 3.  ],
+        [4.  , 3.  , 5.  , 4.13]]),
+         4.13)
 ```

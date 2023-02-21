@@ -189,8 +189,6 @@ def replace_missing_with_distance(*vectors, metric='euclidean', how='vertical'):
         # Delete the columns containing missing values
         vector_array = np.delete(vector_array, np.where(missing_cols), axis=1)
 
-    print(vector_array)
-
     indices = np.where(missing_values)
         
     distances = []

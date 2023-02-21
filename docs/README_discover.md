@@ -62,8 +62,25 @@ v3 = [1, 0, 2]
 corr_coef = correlation_coefficient(v1, v2, v3)
 
 Output: [0.8660254037844387, 1.0, 0.8660254037844387]
-# This can be interpreted as::
+# This can be interpreted as:
 corr_coef between v1 and v2: 0.8660254037844387
 corr_coef between v1 and v3: 1
 corr_coef between v2 and v3: 0.8660254037844387
+```
+# Standard deviation
+### Function returns standard deviation
+```python
+from neulab.discover import std_deviation
+
+v1 = [1, 2, 3, 4, 5, 6]
+v2 = [2, 13, 4, 0, 6, -7]
+v3 = [0, -1, 5]
+
+std = std_deviation(v1, v2)
+
+Output: [1.8708286933869707, 6.6332495807108, 3.2145502536643185]
+# This can be interpreted as:
+std for v1: 1.8708286933869707
+std for v2: 6.6332495807108
+std for v3: 3.2145502536643185
 ```

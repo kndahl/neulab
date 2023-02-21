@@ -1,129 +1,91 @@
-# from cmath import inf
-# from textwrap import indent
-# from bleach import clean
-# import pandas as pd
-# import numpy as np
+from neulab.discover import std_deviation
+import numpy as np
+import warnings
+from scipy.special import erfc
 
-# def SimpleOutDetect(dataframe, info=True, autorm=False):
-#     '''Simple algorithm. 
-#     Remove all outliers from the vector. 
-#     Returns cleared dataframe is autorm is True.'''
+def zscore_outliers(*vectors):
+    """
+    Z-score algorithm to remove outliers.
 
-#     from neulab.discover import is_symmetric, std_deviation
-#     for column in dataframe:
-#         vector = np.array(dataframe[column])
-#         # Define vector type
-#         if is_symmetric(vector=vector):
-#             if info is True:
-#                 print(f'Vector {column} is symmetric.')
-#             i = 0
-#             outliers = []
-#             dict = {}
-#             for elem in vector:
-#                 cleared = np.delete(vector, i)
-#                 mean = np.mean(cleared)
-#                 std = std_deviation(vector=cleared)
-#                 interval1 = mean - 3 * std
-#                 interval2 = mean + 3 * std
-#                 if interval1 < elem < interval2:
-#                     pass
-#                 else:
-#                     outliers.append(elem)
-#                     if info is True:
-#                         print(f'Found outlier: {elem}')
-#                     if autorm is True:
-#                         vector = np.delete(vector, i)
-#                         condition = dataframe[column] == elem
-#                         out = dataframe[column].index[condition]
-#                         dataframe.drop(index=out, inplace = True)
-#                         i -= 1
-#                     dict.update({column:outliers})
-#                 i += 1
-#         else:
-#             if info is True:
-#                 print(f'Vector {column} is asymmetric.')
-#             i = 0
-#             outliers = []
-#             dict = {}
-#             for elem in vector:
-#                 cleared = np.delete(vector, i)
-#                 mean = mean(vector=cleared)
-#                 std = std_deviation(vector=cleared)
-#                 interval1 = mean - 3 * std
-#                 interval2 = mean + 3 * std
-#                 if interval1 < elem < interval2:
-#                     pass
-#                 else:
-#                     outliers.append(elem)
-#                     if info is True:
-#                         print(f'Found outlier: {elem}')
-#                     if autorm is True:
-#                         vector = np.delete(vector, i)
-#                         condition = dataframe[column] == elem
-#                         out = dataframe[column].index[condition]
-#                         dataframe.drop(index=out, inplace = True)
-#                         if info is True:
-#                             print('Outlier deleted.')
-#                         i -= 1
-#                     dict.update({column:outliers})
-#                 i += 1
+    Parameters:
+        *vectors: variable-length list of vectors, each represented as a list of numbers.
 
-#         if dict:
-#             print(f'Detected outliers: {dict}')
+    Returns:
+        A tuple containing two lists:
+            - A list of cleared vectors, where outliers have been removed.
+            - A list of the dropped outliers.
+    """
+    cleared_vectors = []
+    outliers = []
+    for vector in vectors:
+        # Convert the list to a numpy array
+        vector = np.array(vector)
 
-#     return dataframe
+        if vector.shape[0] < 11:
+            warnings.warn(f'The z-score algorithm may not perform well on small vectors. Recommended minimum vector length is 11, recieved: {vector.shape[0]}')
 
-# def Chauvenet(dataframe, info=True, autorm=False):
-#     '''Chauvenet algorithm. Remove all outliers from the vector. 
-#     Returns cleared dataframe is autorm is True.'''
+        # Calculate the mean and standard deviation of the vector
+        mean = np.mean(vector)
+        std = std_deviation(vector)
 
-#     from scipy import special
-#     from neulab.discover import std_deviation
-#     import warnings
-#     warnings.filterwarnings("ignore", category=RuntimeWarning) 
+        # Find the outliers (values > 3 standard deviations from the mean)
+        is_outlier = np.abs(vector - mean) > 3 * std
+        if np.any(is_outlier):
+            # Add the outliers to the list
+            outliers.extend(list(vector[is_outlier]))
 
-#     def loop(i, elem, vector, outliers, dataframe, dictionary):
-#         if len(outliers) == 0:
-#             outliers = []
-#         else:
-#             outliers = list(dict.fromkeys(outliers))
-#         for elem in vector:
-#             is_out_cond = special.erfc(np.abs(elem - np.mean(vector))/std_deviation(vector=vector)) < 1 / (2 * len(vector))
-#             if is_out_cond:
-#                 outliers.append(elem)
-#                 if autorm is True:
-#                     vector = np.delete(vector, i)
-#                     condition = dataframe[column] == elem
-#                     out = dataframe[column].index[condition]
-#                     dataframe.drop(index=out, inplace = True)
-#                     i -= 1
-#                 dictionary.update({column:outliers})
-#                 loop(i=0, elem=elem, vector=vector, outliers=outliers, dataframe=dataframe, dictionary=dictionary)
-#             i += 1
+            # Remove the outliers from the vector
+            not_outlier_indices = np.where(~is_outlier)[0]
+            vector = vector[not_outlier_indices]
+        cleared_vectors.append(list(vector))
 
-#     for column in dataframe:
-#         if info is True:
-#             print(f'Checking column: {column}...')
-#         vector = np.array(dataframe[column])
-#         i = 0
-#         outliers = []
-#         dictionary = {}
-#         for elem in vector:
-#             is_out_cond = special.erfc(np.abs(elem - np.mean(vector))/std_deviation(vector=vector)) < 1 / (2 * len(vector))
-#             if is_out_cond:
-#                 outliers.append(elem)
-#                 if autorm is True:
-#                     vector = np.delete(vector, i)
-#                     condition = dataframe[column] == elem
-#                     out = dataframe[column].index[condition]
-#                     dataframe.drop(index=out, inplace = True)
-#                     i -= 1
-#                 dictionary.update({column:outliers})
-#                 loop(i=0, elem=elem, vector=vector, outliers=outliers, dataframe=dataframe, dictionary=dictionary)
-#             i += 1
-#         if dictionary:
-#             print(f'Detected outliers: {dictionary}')
-#     return dataframe
+    return cleared_vectors, outliers
+
+
+def chauvenet_outliers(*vectors):
+    """
+    Chauvenet algorithm to remove outliers.
+
+    Parameters:
+        *vectors: variable-length list of vectors, each represented as a list of numbers.
+
+    Returns:
+        A tuple containing two lists:
+            - A list of cleared vectors, where outliers have been removed.
+            - A list of the dropped outliers.
+    """
+
+    cleared_vectors = []
+    outliers = []
+    for vector in vectors:
+        # Convert the list to a numpy array
+        vector = np.array(vector)
+
+        mean = np.mean(vector)
+        std = std_deviation(vector)
+
+        # Lenght of incoming array
+        N = len(vector) 
+        # Chauvenet's criterion
+        criterion = 1.0 / (2 * N) 
+        # Distance of a value to mean in std's
+        d = abs(vector - mean) / std
+        # Area normal dist.
+        prob = erfc(d)
+
+        bools = prob < criterion
+
+        outliers.append(vector[np.where(bools)])
+
+        # Remove the outliers from the data
+        cleared_vector = [vector[i] for i in range(len(vector)) if vector[i] not in outliers[0]]
+        cleared_vectors.append(cleared_vector)
+
+    # Concatenate outliers
+    outliers = np.concatenate(outliers)
+    outliers = outliers.flatten()
+
+    return cleared_vectors, outliers
 
 # def Quratile(dataframe, info=True, autorm=False):
 #     '''Quratile algorithm doest use standart deviation and average mean. 

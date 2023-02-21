@@ -1,26 +1,35 @@
 import numpy as np
 
-def min_max_normalize(*arrays):
+def min_max_normalizer(*vectors):
     """
-    Normalizes n input arrays using the Min-Max algorithm to a range of [0, 1].
+    Normalizes input arrays using the Min-Max algorithm to a range of [0, 1].
     """
-    normalized_arrays = []
-    for array in arrays:
+    normalized_vectors = []
+    for vector in vectors:
         # Check for NaNs in the input arrays.
-        if np.isnan(array).any():
+        if np.isnan(vector).any():
             raise ValueError("Input arrays must not contain NaN values")
             
         # Normalize the array.
-        min_val = np.nanmin(array)
-        max_val = np.nanmax(array)
-        normalized_array = (array - min_val) / (max_val - min_val)
-        normalized_arrays.append(normalized_array)
+        min_val = np.nanmin(vector)
+        max_val = np.nanmax(vector)
+        normalized_vector = (vector - min_val) / (max_val - min_val)
+        normalized_vectors.append(normalized_vector)
     
-    return normalized_arrays
+    return normalized_vectors
 
-# def meanNormalization(column):
-#     ''' Normalization function that normalize data in column by mean algotithm '''
-
-#     vector = np.array(column)
-#     mean_normalization = (vector - np.mean(vector))/(np.std(vector))
-#     return mean_normalization
+def mean_normalizer(*vectors):
+    """
+    Normalizes an input array using mean algorithm.
+    """
+    normalized_vectors = []
+    for vector in vectors:
+        # Check for NaNs in the input arrays.
+        if np.isnan(vector).any():
+            raise ValueError("Input arrays must not contain NaN values")
+        
+        mean = np.mean(vector)
+        normalized_arr = (vector - mean) / np.std(vector)
+        normalized_vectors.append(normalized_arr)
+    
+    return normalized_vectors

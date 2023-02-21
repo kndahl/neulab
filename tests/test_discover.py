@@ -5,7 +5,6 @@ from neulab.discover import manhattan_distance
 from neulab.discover import max_distance
 from neulab.discover import correlation_coefficient
 from neulab.discover import std_deviation
-from neulab.discover import is_symmetric
 import numpy as np
 import pytest
 
@@ -87,7 +86,3 @@ def test_correlation_coefficient_random():
 def test_std():
     v = [8.02, 8.16, 3.97, 8.64, 0.84, 4.46, 0.81, 7.74, 8.78, 9.26, 20.46, 29.87, 10.38, 25.71]
     assert std_deviation(v) == 8.767464705525615
-
-def test_symmetrci():
-    v = [8.02, 8.16, 3.97, 8.64, 0.84, 4.46, 0.81, 7.74, 8.78, 9.26, 20.46, 29.87, 10.38, 25.71]
-    assert is_symmetric(vector=v) == True
