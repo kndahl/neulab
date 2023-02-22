@@ -43,7 +43,7 @@ The function first computes pairwise distances between vectors using the specifi
 
 ### Parameters
 1. vectors: list of input vectors to be clustered
-2. num_clusters (optional): number of clusters to form, default value is 2
+2. num_clusters: number of clusters to form, default value is 2
 3. metric (optional): distance metric to be used, default value is Euclidean distance
 4. draw (optional): boolean value to plot the results, default value is False
 5. figsize (optional): size of the plot, default value is (10, 10)
@@ -92,3 +92,47 @@ Output:
 clusters: a list of clusters
 ```
 ![plot](forel.png)
+# Kmeans Clustering
+### Description
+The algorithm takes a list of vectors, the desired number of clusters (k), and an optional maximum number of iterations. It initializes the centroids randomly, and then alternates between assigning vectors to their closest centroid and updating the centroids to the means of their assigned vectors until convergence. The function returns the final list of clusters, where each cluster is a list of indices of the vectors assigned to it.
+### Parameters
+1. vectors: list of input vectors to be clustered
+2. num_clusters: number of clusters to form, default value is 2
+3. max_iterations: maximum number of iterations for convergence default value is 100
+4. draw (optional): a boolean value that determines whether to plot the results or not.
+5. figsize (optional): size of the plot, default value is (10, 10)
+### Returns
+A list of clusters, where each cluster is a list of vector indices
+```python
+from sklearn.datasets import make_blobs
+from neulab.clusters import kmeans_clusterize
+
+# Generate a random dataset
+X, _ = make_blobs(n_samples=100, centers=4, random_state=42)
+
+# Cluster the dataset using k-means with k=4
+k = 4
+clusters = kmeans_clusterize(vectors=X, num_clusters=k)
+
+# Print the cluster assignments
+for i, c in enumerate(clusters):
+    print("Cluster {}: {}".format(i, c))
+
+# Visualize the results
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(8, 8))
+colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k']
+for i, c in enumerate(clusters):
+    color = colors[i % len(colors)]
+    plt.scatter([X[j][0] for j in c], [X[j][1] for j in c], c=color)
+plt.title('K-Means Clustering (k={})'.format(k))
+plt.show()
+
+Output:
+Cluster 0: [6, 7, 8, 13, 17, 23, 24, 26, 31, 38, 39, 41, 49, 50, 51, 52, 58, 61, 68, 70, 80, 89, 90, 97, 99]
+Cluster 1: [2, 9, 10, 14, 20, 25, 34, 35, 36, 37, 43, 44, 56, 57, 59, 73, 82, 84, 85, 86, 88, 92, 94, 95, 96]
+Cluster 2: [1, 3, 5, 11, 12, 29, 30, 32, 42, 45, 46, 53, 60, 63, 66, 69, 71, 74, 76, 78, 79, 81, 87, 91, 93]
+Cluster 3: [0, 4, 15, 16, 18, 19, 21, 22, 27, 28, 33, 40, 47, 48, 54, 55, 62, 64, 65, 67, 72, 75, 77, 83, 98]
+```
+![plot](kmeans.png)

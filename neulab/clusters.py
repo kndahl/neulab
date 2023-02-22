@@ -2,6 +2,7 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import random
 
 def graph_clusterize(vectors, metric='euclidean', threshold=None, draw=False, figsize=(10, 10)):
     """
@@ -188,10 +189,57 @@ def forel_clusterize(vectors, radius, draw=False, figsize=(10, 10)):
 
     return clusters
 
-# def Kmeans(data, num_clusters):
-#     from sklearn.cluster import Kmeans
 
-#     cluster = Kmeans(n_clusters=num_clusters)
-#     model = cluster.fit(data)
-#     data['cluster'] = model.labels_
-#     return data
+def kmeans_clusterize(vectors, num_clusters, max_iterations=100, draw=False, figsize=(10, 10)):
+    """
+    Clusters input vectors using KMeans algorithm.
+    Parameters:
+        - vectors: list of input vectors to be clustered
+        - num_clusters: number of clusters to create
+        - max_iterations: maximum number of iterations for convergence
+        - draw: plot results if True
+        - figsize: plot size
+    Returns:
+        - clusters: a list of clusters, where each cluster is a list of vector indices
+    """
+    def distance(a, b):
+        return math.sqrt(sum((a[i] - b[i])**2 for i in range(len(a))))
+
+    def plot_clusters(vectors, centroids, clusters):
+        fig, ax = plt.subplots(figsize=(8, 8))
+        colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k']
+        for i, c in enumerate(clusters):
+            color = colors[i % len(colors)]
+            plt.scatter([vectors[j][0] for j in c], [vectors[j][1] for j in c], c=color)
+        plt.title('K-Means Clustering (k={})'.format(len(clusters)))
+        plt.show()
+
+    # Initialize centroids randomly
+    centroids = random.sample(list(vectors), num_clusters)
+    # Initialize clusters to empty lists
+    clusters = [[] for _ in range(num_clusters)]
+
+    for i in range(max_iterations):
+        # Assign each vector to the nearest cluster
+        for j in range(len(vectors)):
+            distances = [distance(vectors[j], centroid) for centroid in centroids]
+            closest_centroid = np.argmin(distances)
+            clusters[closest_centroid].append(j)
+
+        # Update centroids based on the new clusters
+        for k in range(num_clusters):
+            if len(clusters[k]) > 0:
+                new_centroid = np.mean([vectors[j] for j in clusters[k]], axis=0)
+                centroids[k] = new_centroid
+            clusters[k] = []
+
+    # Assign each vector to its final cluster
+    for j in range(len(vectors)):
+        distances = [distance(vectors[j], centroid) for centroid in centroids]
+        closest_centroid = np.argmin(distances)
+        clusters[closest_centroid].append(j)
+
+    if draw == True:
+        plot_clusters(vectors, centroids, clusters)
+
+    return clusters
