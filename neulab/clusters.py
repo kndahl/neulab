@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 def graph_clusterize(vectors, metric='euclidean', threshold=None, draw=False, figsize=(10, 10)):
     """
@@ -136,156 +137,56 @@ def mst_clusterize(vectors, num_clusters=2, metric='euclidean', draw=False, figs
     
     return clusters
 
-# class Forel:
-#     """
-#     A class representing FOREL clustering algorithm. 
-#     The algorithm itself determines the number of clusters. 
 
-#     Example:
-#         from neulab.Clustering import Forel
-#         import pandas as pd
-
-#         df = pd.read_csv('tests/csv/iris.csv').drop('Name', axis = 1)
-#         forel = Forel(data=df, verbose=True, scale = True, radius = 60)
-#         cluster = forel.get_clusters()
-
-#     """
-
-#     def __init__(self, data, radius=None, metric=euclidean_distance, scale=False, verbose=False):
-
-#         """
-#         Init function
-        
-#         Parameter data: pandas.DataFrame with objects to cluster
-        
-#         Parameter radius: search radius for local clusters
-#         Precondition: radius equals mean distance between objects divided by 2
-
-#         Parameter metric: metric function used to calculate distance between objects
-#         Precondition: neulab.Algorithms.euclidean_distance
-
-#         Parameter scale: If true all object parametres scaled in [0, 100]
-#         Precondition: False
-
-#         Parameter verbose: Show additional info
-#         Precondition: False
-
-#         """
-
-#         self.metric = metric
-#         self.scale = scale
-#         if self.scale:
-#             min_max_scaler = MinMaxScaler((0,100))
-#             self.data = pd.DataFrame(min_max_scaler.fit_transform(data), columns = data.columns)
-#         else:
-#             self.data = data.copy()
-#         self.verbose = verbose
-#         self.points = {}
+def forel_clusterize(vectors, radius, draw=False, figsize=(10, 10)):
+    """
+    Clusters input vectors using Forel algorithm.
+    Parameters:
+        - vectors: list of input vectors to be clustered
+        - radius: distance of an existing centroid, the vector is assigned to the closest cluster.
+        - draw: plot results if True
+        - figsize: plot size
+    Returns:
+        - clusters: a list of clusters, where each cluster is a list of vector indices
+    """
+    def distance(a, b):
+        return math.sqrt(sum((a[i] - b[i])**2 for i in range(len(a))))
     
-#         for index, row in self.data.iterrows():
-#             self.points.update({index: row.to_numpy()})
-#         # if self.verbose:
-#         #     print(f'Points: {self.points}')
-        
-#         if radius is None:
-#             combs = combinations(list(self.points.values()), 2)
-#             dist = list(map(lambda x: self.metric(*x), list(combs)))
-#             self.radius = mean(dist)/2
-#             if verbose:
-#                 print('R parameter was automaticly calculated.')
-#                 print(f'R = {self.radius}')
-#         else:
-#             self.radius = radius
+    def plot_clusters(vectors, centroids, clusters, radius):
+        colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k']
+        fig, ax = plt.subplots(figsize=(8, 8))
+        for i in range(len(clusters)):
+            cluster_color = colors[i % len(colors)]
+            cluster_indices = clusters[i]
+            cluster_vectors = [vectors[j] for j in cluster_indices]
+            centroid = centroids[i]
+            circle = plt.Circle(centroid, radius, color=cluster_color, fill=False)
+            ax.add_artist(circle)
+            ax.annotate('Cluster {}'.format(i), xy=centroid, xytext=(centroid[0] + 0.5, centroid[1] + 0.5))
+            plt.scatter([v[0] for v in cluster_vectors], [v[1] for v in cluster_vectors], c=cluster_color)
+            plt.scatter(centroid[0], centroid[1], c='k', marker='x', s=100)
+        ax.set_aspect('equal', adjustable='box')
+        max_val = max(max(v[0], v[1]) for v in vectors)
+        ax.set_xlim([0, max_val])
+        ax.set_ylim([0, max_val])
+        plt.title('Forel Clustering (Radius = {})'.format(radius))
+        plt.show()
 
-#     def __dist(self, point_1, point_2):
-#         """
-#         Function for distance calculation between objects
-#         """
-    
-#         return self.metric(point_1, point_2)
+    centroids = []
+    clusters = []
 
-#     def __in_cluster(self, center, point):
-#         """
-#         Returns true if object in cluster
-#         """
-    
-#         return self.metric(center, point) <= self.radius 
+    for i in range(len(vectors)):
+        if all(distance(vectors[i], c) > radius for c in centroids):
+            centroids.append(vectors[i])
+            clusters.append([i])
+        else:
+            closest_centroid = min(range(len(centroids)), key=lambda j: distance(vectors[i], centroids[j]))
+            clusters[closest_centroid].append(i)
 
-#     def __get_neighbors(self, p, points):
-#         """
-#         Function to find objects in a radius
-#         """
-#         neighbors = [point for point in points if self.__in_cluster(p, point)]
-#         return np.array(neighbors)
+    if draw == True:
+        plot_clusters(vectors, centroids, clusters, radius=radius)
 
-#     def __get_centroid(self, points):
-#         """
-#         Function for center of mass calculation
-#         """
-#         return np.mean(points, axis=0)
-
-#     def __get_random_point(self, points):
-#         """
-#         Function for getting random object
-#         """
-#         random_index = np.random.choice(len(points), 1)[0]
-#         return points[random_index]
-
-#     def __remove_points(self, subset, points):
-#         """
-#         Function for objects list filtering
-#         """
-#         subset = [list(i) for i in subset]
-#         points = [p for p in points if list(p) not in subset]
-#         return points
-
-#     def __get_centroids(self, tol=1e-5):
-#         """
-#         Function with FOREL algorithm
-#         """
-#         self.centroids = []
-#         points = list(self.points.values())
-#         while len(points) != 0:
-#             current_point = self.__get_random_point(points)
-#             neighbors = self.__get_neighbors(current_point, points)
-#             centroid = self.__get_centroid(neighbors)
-#             while self.__dist(current_point, centroid) > tol:
-#                 current_point = centroid
-#                 neighbors = self.__get_neighbors(current_point, points)
-#                 centroid = self.__get_centroid(neighbors)
-#             points = self.__remove_points(neighbors, points)
-#             self.centroids.append(current_point)
-
-#     def __cluster_mapping(self, point):
-#         """
-#         Function mapping point and cluster
-#         """
-#         for i in range(len(self.centroids)):
-#             if self.__in_cluster(self.centroids[i], point):
-#                 return f"cluster {i+1}", self.centroids[i]
-
-#     def __detect_clusters(self):
-#         """
-#         Returns df with resulting clusters
-#         """
-        
-#         df = self.data.copy()
-#         df['point'] = list(self.points.values()) 
-#         df['cluster'], df['cluster_center'] = zip(*df.point.apply(lambda x: self.__cluster_mapping(x)))
-#         return df
-
-#     def __visualise(self):
-#         """
-#         Function for clusters visualisation
-#         """
-#         pd.plotting.parallel_coordinates(self.__detect_clusters().drop(['point', 'cluster_center'], axis = 1), 'cluster')
-
-#     def get_clusters(self):
-#         self.__get_centroids()
-#         df = self.__detect_clusters()
-#         if self.verbose:
-#             self.__visualise()
-#         return df
+    return clusters
 
 # def Kmeans(data, num_clusters):
 #     from sklearn.cluster import Kmeans

@@ -6,8 +6,8 @@ graph_clusterize function, clusters input vectors using the Graph algorithm in N
 1. vectors: a list of input vectors to be clustered.
 2. metric: distance metric to be used (default is Euclidean distance). It can take two values - 'euclidean' and 'cosine'.
 3. threshold: distance threshold for considering two vectors to be in the same cluster.
-4. draw: a boolean value that determines whether to plot the results or not.
-5. figsize: a tuple that determines the size of the plot.
+4. draw (optional): a boolean value that determines whether to plot the results or not.
+5. figsize (optional): a tuple that determines the size of the plot.
 ### Returns
 A list of clusters, where each cluster is a list of vector indices.
 
@@ -67,3 +67,28 @@ Output:
 clusters: [{0, 3}, {1, 2}, {4, 5}]
 ```
 ![plot](mstgraph.png)
+# Forel Clustering
+### Description
+The algorithm works by initializing an empty list of centroids and an empty list of clusters. It then loops over all the vectors and checks whether each vector is within radius distance of any existing centroid. If it is not, the vector becomes a new centroid and a new cluster is created for it. If it is within radius distance of an existing centroid, the vector is assigned to the closest cluster.
+
+The function returns a list of clusters, where each cluster is represented as a list of indices into the vectors list.
+
+Note that the choice of radius can have a significant impact on the resulting clusters. If radius is too small, some vectors may not be assigned to any cluster. If radius is too large, all vectors may be assigned to a single cluster. It is often useful to experiment with different values of radius to find the one that produces the best clustering for a given dataset.
+### Parameters
+1. vectors: list of input vectors to be clustered
+2. radius: distance of an existing centroid, the vector is assigned to the closest cluster.
+3. draw (optional): a boolean value that determines whether to plot the results or not.
+4. figsize (optional): size of the plot, default value is (10, 10)
+### Returns
+A list of clusters, where each cluster is a list of vector indices
+```python
+from neulab.clusters import forel_clusterize
+
+vectors = [(random.uniform(0, 10), random.uniform(0, 10)) for _ in range(50)]
+
+clusters = forel_clusterize(vectors=vectors, radius=5.0, draw=True)
+
+Output:
+clusters: a list of clusters
+```
+![plot](forel.png)
