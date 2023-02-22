@@ -66,3 +66,4 @@ clusters = mst_clusterize(vectors, num_clusters=3, metric='cosine', draw=True, f
 Output:
 clusters: [{0, 3}, {1, 2}, {4, 5}]
 ```
+![plot](mstgraph.png)
