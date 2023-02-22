@@ -20,8 +20,6 @@ pip install neulab
 # Updates
 [0.0.24](docs/vers_hist/0.0.24.md)
 
-[0.0.25](docs/vers_hist/0.0.25.md)
-
 # Community
 Feel free to create pull requests and help us improve the project.
 
