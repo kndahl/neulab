@@ -18,6 +18,7 @@ def min_max_normalizer(*vectors):
     
     return normalized_vectors
 
+
 def mean_normalizer(*vectors):
     """
     Normalizes an input array using mean algorithm.

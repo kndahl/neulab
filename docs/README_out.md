@@ -38,3 +38,37 @@ Output:
 Cleared vectors: [[1, 2, 3, 5, 2, 1], [1, 2, 1, 3, 89, 2]]
 Outliers: [54 89]
 ```
+# Quartile outliers detection
+### Finds outliers in n vectors using Quartile algorithm.
+```python
+import random 
+from neulab.outliers import quartile_outliers
+
+v1 = [1, 2, 54, 3, 5, 2, 1]
+v2 = [1, 2, 1, 3, 89, 2]
+
+cleared_vector, outliers = quartile_outliers(v1, v2)
+
+print("Cleared vector:", cleared_vector)
+print("Outliers:", outliers)
+Output:
+Cleared vectors: [[1, 2, 3, 5, 2, 1], [1, 2, 1, 3, 2]]
+Outliers: [54, 89]
+```
+# Dixon Q-test outliers detection
+### Finds outliers in n vectors using Dixon Q-test algorithm.
+```python
+import random 
+from neulab.outliers import dixon_test_outliers
+
+v1 = [1, 2, 54, 3, 5, 2, 1]
+v2 = [1, 2, 1, 3, 89, 2]
+
+cleared_vector, outliers = dixon_test_outliers(v1, v2)
+
+print("Cleared vector:", cleared_vector)
+print("Outliers:", outliers)
+Output:
+Cleared vectors: [[1, 2, 3, 5, 2, 1], [1, 2, 1, 3, 2]]
+Outliers: [54, 89]
+```
