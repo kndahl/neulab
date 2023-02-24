@@ -23,7 +23,7 @@ df_recovered = simple_imputation(data, method='mode')
 
 Output:
 NaN values imputed with mode.
-    A	B
+        A	B
 0	1.0	6.0
 1	2.0	7.0
 2	1.0	7.0
@@ -56,7 +56,7 @@ df_recovered = distance_imputation(data, metric='euclidean')
 
 Output:
 NaN values imputed with euclidean metric.
-    A	B
+        A	B
 0	1.0	6.0
 1	2.0	7.0
 2	1.0	7.0
@@ -90,7 +90,7 @@ df_recovered = iterative_imputation(data)
 
 Output:
 Imputing NaN using IterativeImputer
-    A	B
+        A	B
 0	1.0	6.0
 1	2.0	7.0
 2	2.0	7.0
