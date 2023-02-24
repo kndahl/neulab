@@ -1,5 +1,3 @@
-import sys
-sys.path.append('.')
 import warnings
 
 def std_deviation(data, fillna=None):
@@ -19,6 +17,10 @@ def std_deviation(data, fillna=None):
         A DataFrame containing the std deviation of DataFrame for each column.
     """
     from neulab.Vector.discover import std_deviation
+
+    if fillna is not None:
+        if fillna not in ['mode', 'median', 'mean']:
+            raise ValueError('Invalid fillna method specified.')
 
     df_copy = data.copy()
 
@@ -82,7 +84,7 @@ def euclidean_matrix(data, fillna=None):
                         point1 = df_copy[col1].fillna(df_copy[col1].mean())
                         point2 = df_copy[col2].fillna(df_copy[col2].mean())
                     else:
-                        raise ValueError('Invalid fillna_method specified')
+                        raise ValueError('Invalid fillna method specified')
                 else:
                     point1 = df_copy[col1].values
                     point2 = df_copy[col2].values

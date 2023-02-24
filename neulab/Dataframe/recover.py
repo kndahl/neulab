@@ -1,5 +1,3 @@
-import sys
-sys.path.append('.')
 
 def simple_imputation(data, method='mean'):
     """
@@ -18,6 +16,15 @@ def simple_imputation(data, method='mean'):
     pandas.DataFrame
         A DataFrame with NaN values imputed using the specified method.
     """
+
+    import pandas as pd
+    import numpy as np
+
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("Input data must be a pandas DataFrame.")
+
+    if not data.select_dtypes(include=[np.number]).columns.any():
+        raise ValueError("Input DataFrame must contain numerical data.")
    
     df_copy = data.copy()
 
@@ -59,6 +66,14 @@ def distance_imputation(data, metric='euclidean'):
 
 
     from neulab.Vector.recover import replace_missing_with_distance
+    import pandas as pd
+    import numpy as np
+
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("Input data must be a pandas DataFrame.")
+
+    if not data.select_dtypes(include=[np.number]).columns.any():
+        raise ValueError("Input DataFrame must contain numerical data.")
 
     if metric not in ['euclidean', 'manhattan', 'max']:
         raise ValueError(f'Invalid imputation metric: {metric}.')
@@ -114,8 +129,15 @@ def iterative_imputation(data):
     """
 
     import pandas as pd
+    import numpy as np
     from sklearn.experimental import enable_iterative_imputer
     from sklearn.impute import IterativeImputer
+
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("Input data must be a pandas DataFrame.")
+
+    if not data.select_dtypes(include=[np.number]).columns.any():
+        raise ValueError("Input DataFrame must contain numerical data.")
 
     df_copy = data.copy()
 

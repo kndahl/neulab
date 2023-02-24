@@ -1,7 +1,3 @@
-from neulab.Vector.discover import std_deviation
-import numpy as np
-import warnings
-from scipy.special import erfc
 
 def zscore_outliers(*vectors):
     """
@@ -15,6 +11,10 @@ def zscore_outliers(*vectors):
             - A list of cleared vectors, where outliers have been removed.
             - A list of the dropped outliers.
     """
+
+    import numpy as np
+    import warnings
+
     cleared_vectors = []
     outliers = []
     for vector in vectors:
@@ -22,14 +22,14 @@ def zscore_outliers(*vectors):
         vector = np.array(vector)
 
         if vector.shape[0] < 11:
-            warnings.warn(f'The z-score algorithm may not perform well on small vectors. Recommended minimum vector length is 11, recieved: {vector.shape[0]}')
+            warnings.warn(f'The z-score algorithm may not perform well on small vectors. Recommended minimum vector length is 11, received: {vector.shape[0]}')
 
-        # Calculate the mean and standard deviation of the vector
-        mean = np.mean(vector)
-        std = std_deviation(vector)
+        # Calculate the median and median absolute deviation of the vector
+        median = np.median(vector)
+        mad = np.median(np.abs(vector - median))
 
-        # Find the outliers (values > 3 standard deviations from the mean)
-        is_outlier = np.abs(vector - mean) > 3 * std
+        # Find the outliers (values > 3 median absolute deviations from the median)
+        is_outlier = np.abs(vector - median) > 3 * mad
         if np.any(is_outlier):
             # Add the outliers to the list
             outliers.extend(list(vector[is_outlier]))
@@ -54,6 +54,10 @@ def chauvenet_outliers(*vectors):
             - A list of cleared vectors, where outliers have been removed.
             - A list of the dropped outliers.
     """
+
+    from neulab.Vector.discover import std_deviation
+    from scipy.special import erfc
+    import numpy as np
 
     cleared_vectors = []
     outliers = []
@@ -100,6 +104,8 @@ def quartile_outliers(*vectors):
             - A list of cleared vectors, where outliers have been removed.
             - A list of the dropped outliers.
     """
+
+    import numpy as np
 
     cleared_vectors = []
     outliers = []
