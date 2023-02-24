@@ -1,9 +1,9 @@
 import sys
 sys.path.append('.')
-from neulab.clusters import graph_clusterize
-from neulab.clusters import mst_clusterize
-from neulab.clusters import forel_clusterize
-from neulab.clusters import kmeans_clusterize
+from neulab.Vector.clusters import graph_clusterize
+from neulab.Vector.clusters import mst_clusterize
+from neulab.Vector.clusters import forel_clusterize
+from neulab.Vector.clusters import kmeans_clusterize
 import numpy as np
 
 def test_graph_clusterize():

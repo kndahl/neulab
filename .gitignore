@@ -1,4 +1,6 @@
-test.ipynb
+test_vector.ipynb
+test_frame.ipynb
+tests/csv/data01.csv
 __pycache__
 venv
 .pytest_cache

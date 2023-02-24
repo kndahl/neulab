@@ -1,7 +1,7 @@
 import sys
 sys.path.append('.')
-from neulab.normalization import min_max_normalizer
-from neulab.normalization import mean_normalizer
+from neulab.Vector.normalization import min_max_normalizer
+from neulab.Vector.normalization import mean_normalizer
 import numpy as np
 
 def test_min_max_normalizer():

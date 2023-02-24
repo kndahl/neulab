@@ -4,7 +4,7 @@
 Please note that the z-score algorithm may not perform well on small vectors. Recommended minimum vector length is 11.
 ```python
 import random 
-from neulab.outliers import zscore_outliers
+from neulab.Vector.outliers import zscore_outliers
 
 v1 = [1, 2, 54, 3, 0, -1, 2, 8, -2, 5, 2, 1]
 v2 = [1, 2, 1, 3, 89, 0, 1, 0, 5, 4, 2]
@@ -25,7 +25,7 @@ Outliers: [54, 89]
 ### Finds outliers in n vectors using Chauvenet algorithm.
 ```python
 import random 
-from neulab.outliers import chauvenet_outliers
+from neulab.Vector.outliers import chauvenet_outliers
 
 v1 = [1, 2, 54, 3, 5, 2, 1]
 v2 = [1, 2, 1, 3, 89, 2]
@@ -42,7 +42,7 @@ Outliers: [54 89]
 ### Finds outliers in n vectors using Quartile algorithm.
 ```python
 import random 
-from neulab.outliers import quartile_outliers
+from neulab.Vector.outliers import quartile_outliers
 
 v1 = [1, 2, 54, 3, 5, 2, 1]
 v2 = [1, 2, 1, 3, 89, 2]
@@ -59,7 +59,7 @@ Outliers: [54, 89]
 ### Finds outliers in n vectors using Dixon Q-test algorithm.
 ```python
 import random 
-from neulab.outliers import dixon_test_outliers
+from neulab.Vector.outliers import dixon_test_outliers
 
 v1 = [1, 2, 54, 3, 5, 2, 1]
 v2 = [1, 2, 1, 3, 89, 2]

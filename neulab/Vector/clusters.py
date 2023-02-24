@@ -1,8 +1,3 @@
-import networkx as nx
-import numpy as np
-import matplotlib.pyplot as plt
-import math
-import random
 
 def graph_clusterize(vectors, metric='euclidean', threshold=None, draw=False, figsize=(10, 10)):
     """
@@ -16,6 +11,11 @@ def graph_clusterize(vectors, metric='euclidean', threshold=None, draw=False, fi
     Returns:
         - clusters: a list of clusters, where each cluster is a list of vector indices
     """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import networkx as nx
+
     # Compute pairwise distances between vectors
     dist_matrix = np.zeros((len(vectors), len(vectors)))
     for i in range(len(vectors)):
@@ -84,6 +84,11 @@ def mst_clusterize(vectors, num_clusters=2, metric='euclidean', draw=False, figs
     Returns:
         - clusters: a list of clusters, where each cluster is a list of vector indices
     """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import networkx as nx
+
     # Compute pairwise distances between vectors
     dist_matrix = np.zeros((len(vectors), len(vectors)))
     for i in range(len(vectors)):
@@ -150,6 +155,10 @@ def forel_clusterize(vectors, radius, draw=False, figsize=(10, 10)):
     Returns:
         - clusters: a list of clusters, where each cluster is a list of vector indices
     """
+
+    import math
+    import matplotlib.pyplot as plt
+
     def distance(a, b):
         return math.sqrt(sum((a[i] - b[i])**2 for i in range(len(a))))
     
@@ -202,6 +211,12 @@ def kmeans_clusterize(vectors, num_clusters, max_iterations=100, draw=False, fig
     Returns:
         - clusters: a list of clusters, where each cluster is a list of vector indices
     """
+
+    import numpy as np
+    import random
+    import math
+    import matplotlib.pyplot as plt
+
     def distance(a, b):
         return math.sqrt(sum((a[i] - b[i])**2 for i in range(len(a))))
 

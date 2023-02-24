@@ -1,10 +1,10 @@
 import sys
 sys.path.append('.')
-from neulab.discover import euclidean_distance
-from neulab.discover import manhattan_distance
-from neulab.discover import max_distance
-from neulab.discover import correlation_coefficient
-from neulab.discover import std_deviation
+from neulab.Vector.discover import euclidean_distance
+from neulab.Vector.discover import manhattan_distance
+from neulab.Vector.discover import max_distance
+from neulab.Vector.discover import correlation_coefficient
+from neulab.Vector.discover import std_deviation
 import numpy as np
 import pytest
 

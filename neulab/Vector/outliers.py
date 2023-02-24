@@ -1,4 +1,4 @@
-from neulab.discover import std_deviation
+from neulab.Vector.discover import std_deviation
 import numpy as np
 import warnings
 from scipy.special import erfc

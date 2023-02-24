@@ -1,7 +1,7 @@
-from neulab.outliers import zscore_outliers
-from neulab.outliers import chauvenet_outliers
-from neulab.outliers import quartile_outliers
-from neulab.outliers import dixon_test_outliers
+from neulab.Vector.outliers import zscore_outliers
+from neulab.Vector.outliers import chauvenet_outliers
+from neulab.Vector.outliers import quartile_outliers
+from neulab.Vector.outliers import dixon_test_outliers
 import numpy as np
 import random
 

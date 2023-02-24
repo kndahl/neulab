@@ -1,7 +1,7 @@
 # Normalize data using min max normalizer
 ### Function returns the normalized vector
 ```python
-from neulab.normalization import min_max_normalizer
+from neulab.Vector.normalization import min_max_normalizer
 
 v1 = np.array([1, 2, 3, 4, 5])
 v2 = np.array([10, 20, 30, 40, 50])
@@ -19,7 +19,7 @@ Output:
 # Normalize data using mean normalizer
 ### Function returns the normalized vector
 ```python
-from neulab.normalization import mean_normalizer
+from neulab.Vector.normalization import mean_normalizer
 
 v1 = np.array([1, 2, 3, 4, 5])
 v2 = np.array([10, 20, 30, 40, 50])
