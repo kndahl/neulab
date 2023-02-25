@@ -5,6 +5,7 @@ from neulab.Vector.normalization import mean_normalizer
 from neulab.Dataframe.normalization import min_max_normalize
 from neulab.Dataframe.normalization import z_score_normalize
 from neulab.Dataframe.normalization import log_transform
+from neulab.Dataframe.normalization import power_transform
 import pandas as pd
 import numpy as np
 
@@ -52,5 +53,14 @@ def test_log_transform():
     expct_data = {'col1': {0: 0.0, 1: 0.6931471805599453, 2: 1.0986122886681098, 3: 1.3862943611198906},
                     'col2': {0: 2.302585092994046, 1: 2.995732273553991, 2: np.nan, 3: 3.6888794541139363},
                     'col3': {0: 4.605170185988092, 1: 5.298317366548036, 2: 5.703782474656201, 3: np.nan}}
+    df_expected = pd.DataFrame(data=expct_data)
+    assert df_normalized.equals(df_expected)
+
+def test_power_transdorm():
+    df = pd.DataFrame({'col1': [1, 2, 3, 4], 'col2': [10, 20, np.nan, 40], 'col3': [100, 200, 300, np.nan]})
+    df_normalized = power_transform(df, cols_to_transform=df.columns, power=2)
+    expct_data = {'col1': {0: 1, 1: 4, 2: 9, 3: 16},
+                    'col2': {0: 100.0, 1: 400.0, 2: np.nan, 3: 1600.0},
+                    'col3': {0: 10000.0, 1: 40000.0, 2: 90000.0, 3: np.nan}}
     df_expected = pd.DataFrame(data=expct_data)
     assert df_normalized.equals(df_expected)

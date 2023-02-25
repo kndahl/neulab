@@ -75,8 +75,8 @@ from neulab.Dataframe.normalization import log_transform
 # Create a sample DataFrame
 df = pd.DataFrame({'col1': [1, 2, 3, 4], 'col2': [10, 20, np.nan, 40], 'col3': [100, 200, 300, np.nan]})
 
-# Normalize
-df_normalized = log_transform(df, cols_to_transform=df.columns)
+# Transform
+df_transform = log_transform(df, cols_to_transform=df.columns)
 
 Output:
 
@@ -85,4 +85,36 @@ Output:
 1	0.693147	2.995732	5.298317
 2	1.098612	NaN	        5.703782
 3	1.386294	3.688879	NaN
+```
+
+# Power transformation
+Function: power_transform
+### Function is designed to perform a power transformation on the selected columns of the given pandas DataFrame.
+This method applies a logarithmic transformation to the data, which can be useful for data that has a skewed distribution. It is calculated as log(x), where x is the original value.
+## Parameters
+data: pandas.DataFrame - the DataFrame that needs to be normalized
+cols_to_transform: list - list of column names that needs to be transformed.
+power: float - the power to raise the values to. Default is 1 (no transformation).
+## Returns
+pandas.DataFrame: Normalized pandas DataFrame.
+## Example Usage
+```python
+import pandas as pd
+import numpy as np
+from neulab.Dataframe.normalization import power_transform
+
+# Create a sample DataFrame
+df = pd.DataFrame({'col1': [1, 2, 3, 4], 'col2': [10, 20, np.nan, 40], 'col3': [100, 200, 300, np.nan]})
+
+# Transform
+df_transform = power_transform(df, df.columns, power=2)
+
+Output:
+
+
+       col1	col2	       col3
+0	1	100.0	       10000.0
+1	4	400.0	       40000.0
+2	9	NaN	              90000.0
+3	16	1600.0	       NaN
 ```
