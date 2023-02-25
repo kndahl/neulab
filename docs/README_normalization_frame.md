@@ -48,9 +48,9 @@ df_normalized = z_score_normalize(df, cols_to_normalize=df.columns)
 
 Output:
 
-       col1          col2	col3
+              col1          col2	col3
 0	-1.161895	-0.872872	-1.0
 1	-0.387298	-0.218218	0.0
-2	0.387298	 NaN        1.0
+2	0.387298	 NaN          1.0
 3	1.161895	1.091089	NaN
 ```
