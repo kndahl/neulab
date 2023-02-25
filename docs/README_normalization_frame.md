@@ -18,7 +18,7 @@ df = pd.DataFrame({'col1': [1, 2, 3, 4], 'col2': [10, 20, np.nan, 40], 'col3': [
 df_normalized = min_max_normalize(df, cols_to_normalize=df.columns)
 
 Output:
-            col1      col2  col3
+       col1      col2  col3
 0  0.000000  0.000000   0.0
 1  0.333333  0.333333   0.5
 2  0.666667       NaN   1.0
