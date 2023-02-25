@@ -4,6 +4,7 @@ from neulab.Vector.normalization import min_max_normalizer
 from neulab.Vector.normalization import mean_normalizer
 from neulab.Dataframe.normalization import min_max_normalize
 from neulab.Dataframe.normalization import z_score_normalize
+from neulab.Dataframe.normalization import log_transform
 import pandas as pd
 import numpy as np
 
@@ -42,5 +43,14 @@ def test_zscore_normalize_frame():
     expct_data = {'col1': {0: -1.161895003862225, 1: -0.3872983346207417, 2: 0.3872983346207417, 3: 1.161895003862225},
                     'col2': {0: -0.8728715609439694, 1: -0.2182178902359923, 2: np.nan, 3: 1.091089451179962},
                     'col3': {0: -1.0, 1: 0.0, 2: 1.0, 3: np.nan}}
+    df_expected = pd.DataFrame(data=expct_data)
+    assert df_normalized.equals(df_expected)
+
+def test_log_transform():
+    df = pd.DataFrame({'col1': [1, 2, 3, 4], 'col2': [10, 20, np.nan, 40], 'col3': [100, 200, 300, np.nan]})
+    df_normalized = log_transform(df, cols_to_transform=df.columns)
+    expct_data = {'col1': {0: 0.0, 1: 0.6931471805599453, 2: 1.0986122886681098, 3: 1.3862943611198906},
+                    'col2': {0: 2.302585092994046, 1: 2.995732273553991, 2: np.nan, 3: 3.6888794541139363},
+                    'col3': {0: 4.605170185988092, 1: 5.298317366548036, 2: 5.703782474656201, 3: np.nan}}
     df_expected = pd.DataFrame(data=expct_data)
     assert df_normalized.equals(df_expected)

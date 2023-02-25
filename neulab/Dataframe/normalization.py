@@ -58,3 +58,29 @@ def z_score_normalize(data, cols_to_normalize):
         df[col] = (df[col] - col_mean) / col_std
 
     return df
+
+def log_transform(data, cols_to_transform):
+    """
+    Perform a log transformation on the selected columns of the given pandas DataFrame.
+
+    Parameters:
+    data (pandas.DataFrame): The DataFrame to transform.
+    cols_to_transform (list): The list of column names to transform.
+
+    Returns:
+    pandas.DataFrame: The transformed DataFrame.
+    """
+
+    import pandas as pd
+    import numpy as np
+
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("Input data must be a pandas DataFrame.")
+
+    df = data.copy()
+    
+    # Transform the input feature columns
+    for col in cols_to_transform:
+        df[col] = np.log(df[col])
+
+    return df
