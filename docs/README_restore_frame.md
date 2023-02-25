@@ -1,4 +1,5 @@
 # Simple imputation
+Function: simple_imputation
 ### Function performs simple imputation for NaN values in a pandas DataFrame using the specified method. The imputation methods available are 'mean', 'median', and 'mode'. The function returns a new DataFrame with NaN values imputed.
 ## Parameters
 data : pandas.DataFrame
@@ -32,6 +33,7 @@ NaN values imputed with mode.
 ```
 
 # Distance imputation
+Function: distance_imputation
 ### Function performs imputation for missing values in a Pandas DataFrame using the distance method. It calculates the distance between the missing values and other values in the DataFrame using one of the three distance metrics: 'euclidean', 'manhattan', or 'max'. The function then replaces the missing values with the value that is closest to them, based on the chosen distance metric.
 ## Parameters:
 data: pandas.DataFrame
@@ -64,6 +66,7 @@ NaN values imputed with euclidean metric.
 4	5.0	10.0
 ```
 # Iterative imputation
+Function: iterative_imputation
 ### Function imputes missing values in a given DataFrame using the IterativeImputer from scikit-learn. The algorithm works by modeling the missing values as a function of the other features in the dataset.
 It starts by filling in missing values with initial estimates, such as the mean or median of the non-missing values. It then uses this initial estimate to fit a model to the non-missing values and predict the missing values. This process is repeated multiple times, with the predicted values from each iteration being used as the input for the next iteration.
 

@@ -1,10 +1,14 @@
 
-def zscore_outliers(*vectors):
+def zscore_outliers(*vectors, method='mean', threshold=3):
     """
     Z-score algorithm to remove outliers.
 
+    This function uses the Z-score algorithm to remove outliers from a variable-length list of vectors.
+
     Parameters:
-        *vectors: variable-length list of vectors, each represented as a list of numbers.
+        *vectors (list of lists): A variable-length list of vectors, each represented as a list of numbers.
+        method (str): Specifies the method used to calculate the Z-score. Acceptable values are 'mean' or 'median'.
+        threshold (int or float): The threshold for identifying outliers. Values greater than threshold times the standard deviation from the mean (or median) will be considered outliers.
 
     Returns:
         A tuple containing two lists:
@@ -12,8 +16,12 @@ def zscore_outliers(*vectors):
             - A list of the dropped outliers.
     """
 
+    from neulab.Vector.discover import std_deviation
     import numpy as np
     import warnings
+
+    if method not in ['mean', 'median']:
+        raise ValueError('Invalid method specified.')
 
     cleared_vectors = []
     outliers = []
@@ -25,11 +33,17 @@ def zscore_outliers(*vectors):
             warnings.warn(f'The z-score algorithm may not perform well on small vectors. Recommended minimum vector length is 11, received: {vector.shape[0]}')
 
         # Calculate the median and median absolute deviation of the vector
-        median = np.median(vector)
-        mad = np.median(np.abs(vector - median))
+        if method == 'median':
+            # Calculate z-score
+            z_score = np.abs((vector - np.median(vector)) / std_deviation(vector))
+            # Identify outliers using a threshold of standard deviations from the median
+            is_outlier = z_score > threshold
+        elif method == 'mean':
+            # Calculate z-score
+            z_score = np.abs((vector - np.mean(vector)) / std_deviation(vector))
+            # Identify outliers using a threshold times of standard deviations from the mean
+            is_outlier = z_score > threshold
 
-        # Find the outliers (values > 3 median absolute deviations from the median)
-        is_outlier = np.abs(vector - median) > 3 * mad
         if np.any(is_outlier):
             # Add the outliers to the list
             outliers.extend(list(vector[is_outlier]))

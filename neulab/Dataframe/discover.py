@@ -1,4 +1,3 @@
-import warnings
 
 def std_deviation(data, fillna=None):
     """
@@ -16,13 +15,19 @@ def std_deviation(data, fillna=None):
     pandas.DataFrame
         A DataFrame containing the std deviation of DataFrame for each column.
     """
+
     from neulab.Vector.discover import std_deviation
+    import pandas as pd
+    import warnings
+
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
 
     if fillna is not None:
         if fillna not in ['mode', 'median', 'mean']:
             raise ValueError('Invalid fillna method specified.')
-
-    df_copy = data.copy()
 
     if df_copy.isna().any().any():
         warnings.warn('The DataFrame contains NaN values')
@@ -60,8 +65,12 @@ def euclidean_matrix(data, fillna=None):
 
     import pandas as pd
     import numpy as np
+    import warnings
 
-    df_copy = data.copy()
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
 
     distances = pd.DataFrame(columns=df_copy.columns, index=df_copy.columns)
 
@@ -119,8 +128,12 @@ def manhattan_matrix(data, fillna=None):
 
     import pandas as pd
     import numpy as np
+    import warnings
 
-    df_copy = data.copy()
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
 
     distances = pd.DataFrame(columns=df_copy.columns, index=df_copy.columns)
 
@@ -178,8 +191,12 @@ def max_matrix(data, fillna=None):
 
     import pandas as pd
     import numpy as np
+    import warnings
 
-    df_copy = data.copy()
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
 
     distances = pd.DataFrame(columns=df_copy.columns, index=df_copy.columns)
 
@@ -236,7 +253,12 @@ def correlation_matrix(data, method='pearson', plot=False):
         A DataFrame containing the correlation matrix between all pairs of columns in the input DataFrame.
     """
 
-    df_copy = data.copy()
+    import pandas as pd
+
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
 
     corr_matrix = df_copy.corr(method=method)
 
@@ -267,7 +289,10 @@ def check_missing(data, plot=False):
     import matplotlib.pyplot as plt
     import seaborn as sns
 
-    df_copy = data.copy()
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
 
     nan_count = df_copy.isna().sum()
     sorted_columns = nan_count.sort_values(ascending=False)
@@ -303,8 +328,12 @@ def plot_missing_value_dispersion(data):
     """
 
     import seaborn as sns
+    import pandas as pd
 
-    df_copy = data.copy()
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
 
     sns.heatmap(df_copy.isnull(), cbar=False)
 
@@ -324,9 +353,110 @@ def plot_categorical(data):
     """
 
     import matplotlib.pyplot as plt
+    import pandas as pd
+
+    if isinstance(data, pd.DataFrame):
+        pass
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
 
     plt.figure()
     data.nunique().plot.bar()
     plt.title('Number of different values')
     plt.show()
 
+
+def plot_scatter(data):
+    """
+    Plots scatter plots for each column in a given pandas dataframe.
+
+    Parameters
+    ----------
+    data: pandas DataFrame
+        The input data to plot.
+
+    Returns
+    -------
+    None
+        This function only displays the plot and does not return anything.
+    """
+
+    import matplotlib.pyplot as plt
+    import pandas as pd
+
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    elif isinstance(data, pd.Series):
+        df_copy = pd.DataFrame(data)
+    else:
+        raise TypeError("Input data must be a pandas DataFrame or Series.")
+
+    # Create subplots for each column
+    fig, axs = plt.subplots(nrows=len(df_copy.columns), ncols=1, figsize=(6, 4*len(df_copy.columns)))
+
+    # Convert axs to a list if it is a single AxesSubplot object
+    if isinstance(axs, plt.Axes):
+        axs = [axs]
+
+    for i, col in enumerate(df_copy.columns):
+
+        ax = axs[i]
+
+        # Plot
+        ax.scatter(df_copy[col].index, df_copy[col], label=col, alpha=0.7, color='green')
+
+        # Add legend and labels
+        ax.legend()
+        ax.set_xlabel('Index')
+        ax.set_ylabel('Value')
+
+        # Set title for each subplot
+        ax.set_title(f"{col} Distribution")
+
+    plt.tight_layout()
+    plt.show()
+
+
+def get_categorical_columns(data, threshold=0.05):
+    """
+    Detects categorical columns in a pandas DataFrame.
+
+    Parameters
+    ----------
+    data: pandas DataFrame
+        The input data to analyze.
+    threshold: int or float, optional
+        The proportion of unique values below which a column is considered categorical,
+        by default 0.05.
+
+    Returns
+    -------
+    list:
+        A list of column names that are likely to be categorical.
+    """
+
+    import pandas as pd
+
+    if isinstance(data, pd.DataFrame):
+        df_copy = data.copy()
+    else:
+        raise TypeError("Input data must be a pandas DataFrame.")
+
+    # Define a threshold for the number of unique values relative to column size
+    unique_value_threshold = threshold
+
+    # Initialize an empty list to store categorical column names
+    categorical_columns = []
+
+    for col in df_copy.columns:
+        # Count the number of unique values in the column
+        num_unique_values = len(df_copy[col].unique())
+
+        # Compute the proportion of unique values relative to column size
+        unique_value_proportion = num_unique_values / len(df_copy)
+
+        # Check if the proportion is below the threshold
+        if unique_value_proportion < unique_value_threshold:
+            categorical_columns.append(col)
+
+    return categorical_columns

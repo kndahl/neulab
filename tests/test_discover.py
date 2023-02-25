@@ -5,8 +5,11 @@ from neulab.Vector.discover import manhattan_distance
 from neulab.Vector.discover import max_distance
 from neulab.Vector.discover import correlation_coefficient
 from neulab.Vector.discover import std_deviation
+from neulab.Dataframe.discover import get_categorical_columns
+import pandas as pd
 import numpy as np
 import pytest
+import random
 
 def test_euclidean_same_points():
     vector1 = [1, 2, 3]
@@ -86,3 +89,14 @@ def test_correlation_coefficient_random():
 def test_std():
     v = [8.02, 8.16, 3.97, 8.64, 0.84, 4.46, 0.81, 7.74, 8.78, 9.26, 20.46, 29.87, 10.38, 25.71]
     assert std_deviation(v) == 8.767464705525615
+
+def test_get_categorical():
+    df = pd.DataFrame({
+    'col1': [random.randint(0, 99) for _ in range(50)],
+    'col2': [random.randint(0, 100) for _ in range(50)],
+    'col3': [random.randint(50, 90) for _ in range(50)],
+    'col4': [random.randint(0, 1) for _ in range(50)]
+    })
+
+    output = get_categorical_columns(df)
+    assert output == ['col4']
