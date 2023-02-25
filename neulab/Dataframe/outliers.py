@@ -196,6 +196,14 @@ def plot_outliers(data, outliers):
     """
 
     import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("Input data must be a pandas DataFrame.")
+
+    if not data.select_dtypes(include=[np.number]).columns.any():
+        raise ValueError("Input DataFrame must contain numerical data.")
 
     df_copy = data.copy()
 

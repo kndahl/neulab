@@ -2,6 +2,8 @@ import sys
 sys.path.append('.')
 from neulab.Vector.normalization import min_max_normalizer
 from neulab.Vector.normalization import mean_normalizer
+from neulab.Dataframe.normalization import min_max_normalize
+import pandas as pd
 import numpy as np
 
 def test_min_max_normalizer():
@@ -23,3 +25,12 @@ def test_mean_normalizer():
     assert np.allclose(normalized_vec,([[-0.90956084, -0.84134378, -0.77312672, -0.70490965, -0.63669259],
         [-0.29560727,  0.38656336,  1.06873399,  1.75090463,  2.43307526],
         [-0.97777791, -0.63669259, -0.29560727,  0.04547804,  0.38656336]]))
+    
+def test_min_max_normalize_frame():
+    df = pd.DataFrame({'col1': [1, 2, 3, 4], 'col2': [10, 20, np.nan, 40], 'col3': [100, 200, 300, np.nan]})
+    df_normalized = min_max_normalize(df, cols_to_normalize=df.columns)
+    expct_data = {'col1': {0: 0.0, 1: 0.3333333333333333, 2: 0.6666666666666666, 3: 1.0},
+                'col2': {0: 0.0, 1: 0.3333333333333333, 2: np.nan, 3: 1.0},
+                'col3': {0: 0.0, 1: 0.5, 2: 1.0, 3: np.nan}}
+    df_expected = pd.DataFrame(data=expct_data)
+    assert df_normalized.equals(df_expected)
