@@ -3,6 +3,7 @@ sys.path.append('.')
 from neulab.Vector.normalization import min_max_normalizer
 from neulab.Vector.normalization import mean_normalizer
 from neulab.Dataframe.normalization import min_max_normalize
+from neulab.Dataframe.normalization import z_score_normalize
 import pandas as pd
 import numpy as np
 
@@ -32,5 +33,14 @@ def test_min_max_normalize_frame():
     expct_data = {'col1': {0: 0.0, 1: 0.3333333333333333, 2: 0.6666666666666666, 3: 1.0},
                 'col2': {0: 0.0, 1: 0.3333333333333333, 2: np.nan, 3: 1.0},
                 'col3': {0: 0.0, 1: 0.5, 2: 1.0, 3: np.nan}}
+    df_expected = pd.DataFrame(data=expct_data)
+    assert df_normalized.equals(df_expected)
+
+def test_zscore_normalize_frame():
+    df = pd.DataFrame({'col1': [1, 2, 3, 4], 'col2': [10, 20, np.nan, 40], 'col3': [100, 200, 300, np.nan]})
+    df_normalized = z_score_normalize(df, cols_to_normalize=df.columns)
+    expct_data = {'col1': {0: -1.161895003862225, 1: -0.3872983346207417, 2: 0.3872983346207417, 3: 1.161895003862225},
+                    'col2': {0: -0.8728715609439694, 1: -0.2182178902359923, 2: np.nan, 3: 1.091089451179962},
+                    'col3': {0: -1.0, 1: 0.0, 2: 1.0, 3: np.nan}}
     df_expected = pd.DataFrame(data=expct_data)
     assert df_normalized.equals(df_expected)
