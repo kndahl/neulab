@@ -90,7 +90,7 @@ Output:
 # Power transformation
 Function: power_transform
 ### Function is designed to perform a power transformation on the selected columns of the given pandas DataFrame.
-This method applies a logarithmic transformation to the data, which can be useful for data that has a skewed distribution. It is calculated as log(x), where x is the original value.
+This method applies a power transformation to the data, which can be useful for data that has a skewed distribution. It is calculated as x^lambda, where x is the original value and lambda is a parameter that can be tuned.
 ## Parameters
 data: pandas.DataFrame - the DataFrame that needs to be normalized
 cols_to_transform: list - list of column names that needs to be transformed.
