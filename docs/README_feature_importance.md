@@ -22,18 +22,18 @@ both = min_max_normalize(both, cols_to_normalize=both.drop(columns=['MEDV', 'RAD
 importance_df = get_feature_importance(both, target_column='MEDV', model='logistic_regression')
 
 Output:
-	feature	importance
-0	CRIM	0.635839
-5	RM	    0.504893
-7	DIS	    0.356908
-10	PTRATIO	0.352902
-11	B	    0.316413
-8	RAD	    0.206935
-6	AGE	    0.206316
-12	LSTAT	0.163176
-3	CHAS	0.155025
-2	INDUS	0.154821
-1	ZN	    0.147038
-4	NOX	    0.070303
-9	TAX	    0.059232
+	feature		importance
+0	CRIM		0.635839
+5	RM	    	0.504893
+7	DIS	    	0.356908
+10	PTRATIO		0.352902
+11	B	    	0.316413
+8	RAD	    	0.206935
+6	AGE	    	0.206316
+12	LSTAT		0.163176
+3	CHAS		0.155025
+2	INDUS		0.154821
+1	ZN	    	0.147038
+4	NOX	    	0.070303
+9	TAX	    	0.059232
 ```
