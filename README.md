@@ -17,6 +17,8 @@ pip install neulab
 
 ## [Clustering](docs/README_cluster.md)
 
+## [Feature importance](docs/README_feature_importance.md)
+
 # Updates
 [0.0.30](docs/vers_hist/0.0.30.md)
 
