@@ -20,9 +20,7 @@ pip install neulab
 ## [Feature importance](docs/README_feature_importance.md)
 
 # Updates
-[0.0.30](docs/vers_hist/0.0.30.md)
-
-[0.0.31](docs/vers_hist/0.0.31.md)
+release [0.1](docs/vers_hist/0.1.md)
 
 # Community
 Feel free to create pull requests and help us improve the project.
